@@ -5,35 +5,201 @@
   <title>MLB Draft Big Board</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin:0; padding:24px; background:#f5f7fa; color:#1f2933; }
-    h1 { margin-bottom:16px; }
-    .board { max-width:1300px; margin:0 auto; background:white; border-radius:8px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.08); }
-    .header, .row { display:grid; grid-template-columns:50px 1.5fr 80px 1.3fr 50px 50px 70px 70px 70px 70px; align-items:center; gap:8px; padding:12px 16px; }
-    .header { background:#111827; color:white; font-weight:600; font-size:13px; text-transform:uppercase; }
-    .row { border-bottom:1px solid #e5e7eb; cursor:pointer; transition: background 0.15s ease; }
-    .row:hover { background:#f0f4f8; }
-    .cell { font-size:14px; }
-    .name { font-weight:600; }
-    .fv { font-weight:700; }
-    .details { grid-column:1 / -1; background:#f9fafb; padding:16px 24px 20px; display:none; font-size:14px; border-bottom:1px solid #e5e7eb; }
-    .details.open { display:block; }
-    .details h4 { margin-top:0; margin-bottom:8px; }
-    .bio { margin-bottom:12px; color:#374151; }
-    .links a { display:inline-block; margin-right:18px; color:#2563eb; text-decoration:none; font-weight:500; }
-    .links a:hover { text-decoration:underline; }
-    .report-btn { background:#2563eb; color:white; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-weight:500; font-size:14px; margin-top:8px; margin-right:8px; display:inline-block; text-align:center; text-decoration:none; }
-    .report-btn:hover { background:#1d4ed8; text-decoration:none; }
-    .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); align-items:center; justify-content:center; }
-    .modal.open { display:flex; }
-    .modal-content { background:white; border-radius:8px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
-    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:16px 32px; }
-    .modal-header h2 { margin:0; font-size:24px; }
-    .close-btn { background:none; border:none; font-size:28px; cursor:pointer; color:#666; }
-    .close-btn:hover { color:#000; }
-    .error { color:#dc2626; padding:16px; background:#fee2e2; border-radius:8px; margin-bottom:16px; }
-    .loading { text-align:center; padding:40px; color:#666; }
-    .spinner { border:3px solid #f3f3f3; border-top:3px solid #2563eb; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite; margin:0 auto 16px; }
-    @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f5f7fa;
+      color: #1f2933;
+    }
+
+    h1 {
+      margin-bottom: 16px;
+    }
+
+    .board {
+      max-width: 1300px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .header, .row {
+      display: grid;
+      grid-template-columns: 50px 1.5fr 80px 1.3fr 50px 50px 70px 70px 70px 70px;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+
+    .header {
+      background: #111827;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .row {
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .row:hover {
+      background: #f0f4f8;
+    }
+
+    .cell {
+      font-size: 14px;
+    }
+
+    .name {
+      font-weight: 600;
+    }
+
+    .fv {
+      font-weight: 700;
+    }
+
+    .details {
+      grid-column: 1 / -1;
+      background: #f9fafb;
+      padding: 16px 24px 20px;
+      display: none;
+      font-size: 14px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .details.open {
+      display: block;
+    }
+
+    .details h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .bio {
+      margin-bottom: 12px;
+      color: #374151;
+    }
+
+    .links a {
+      display: inline-block;
+      margin-right: 18px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .report-btn {
+      background: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      margin-top: 8px;
+      margin-right: 8px;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .report-btn:hover {
+      background: #1d4ed8;
+      text-decoration: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 32px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .error {
+      color: #dc2626;
+      padding: 16px;
+      background: #fee2e2;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #2563eb;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -43,13 +209,23 @@
 
 <div class="board" id="board">
   <div class="header">
-    <div>#</div><div>Name</div><div>Pos</div><div>School</div><div>FV</div><div>Age</div>
-    <div>Height</div><div>Weight</div><div>Bats</div><div>Throws</div>
+    <div>#</div>
+    <div>Name</div>
+    <div>Pos</div>
+    <div>School</div>
+    <div>FV</div>
+    <div>Age</div>
+    <div>Height</div>
+    <div>Weight</div>
+    <div>Bats</div>
+    <div>Throws</div>
   </div>
-  <div class="loading"><div class="spinner"></div>Loading your draft board...</div>
+  <div class="loading">
+    <div class="spinner"></div>
+    Loading your draft board...
+  </div>
 </div>
 
-<!-- Scouting report modal -->
 <div id="reportModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -60,31 +236,72 @@
   </div>
 </div>
 
-<!-- Analytics PDF modal -->
 <div id="pdfModal" class="modal">
-  <div class="modal-content" style="max-width:900px; padding:0;">
-    <div class="modal-header" style="padding:16px 32px;">
-      <h2>Analytics Report</h2>
+  <div class="modal-content" style="max-width: 900px; padding: 0;">
+    <div class="modal-header" style="padding: 16px 32px;">
+      <h2 style="margin: 0;">Analytics Report</h2>
       <button class="close-btn" onclick="closePdfModal()">&times;</button>
     </div>
-    <iframe id="pdfFrame" width="100%" height="600px" style="border:none;"></iframe>
+    <iframe id="pdfFrame" width="100%" height="600px" style="border: none;"></iframe>
   </div>
 </div>
 
 <script>
-const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPoECCo_lX-hwSa9bI8z2KcHVeeFa76m3dQeR9DVjdoxh1qkME0QIvJnNKSL9WwZZ-bQ/exec";
 
-fetch(APPS_SCRIPT_URL)
-  .then(res => res.json())
-  .then(players => {
+  fetch(APPS_SCRIPT_URL)
+    .then(res => res.json())
+    .then(players => {
+      console.log("Loaded players:", players.length);
+      if (players.length === 0) {
+        showError("No player data found. Check your spreadsheet has data.");
+        return;
+      }
+      renderBoard(players);
+    })
+    .catch(err => {
+      showError("Failed to load data. Check your internet connection and Apps Script URL.");
+      console.error(err);
+    });
+
+  function showError(message) {
+    const container = document.getElementById("error-container");
+    container.innerHTML = `<div class="error">${message}</div>`;
+    const loading = document.querySelector(".loading");
+    if (loading) loading.remove();
+  }
+
+  function openReportModal(playerName, reportText) {
+    document.getElementById("modalPlayerName").textContent = playerName;
+    document.getElementById("modalReportText").textContent = reportText;
+    document.getElementById("reportModal").classList.add("open");
+  }
+
+  function closeReportModal() {
+    document.getElementById("reportModal").classList.remove("open");
+  }
+
+  function openPdfModal(pdfUrl) {
+    document.getElementById("pdfFrame").src = pdfUrl;
+    document.getElementById("pdfModal").classList.add("open");
+  }
+
+  function closePdfModal() {
+    document.getElementById("pdfModal").classList.remove("open");
+    document.getElementById("pdfFrame").src = "";
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("reportModal");
+    if (event.target === modal) {
+      modal.classList.remove("open");
+    }
+  }
+
+  function renderBoard(players) {
     const board = document.getElementById("board");
     const loading = board.querySelector(".loading");
     if (loading) loading.remove();
-
-    if (!players || players.length === 0) {
-      showError("No player data found. Check your spreadsheet has data.");
-      return;
-    }
 
     players.forEach(player => {
       const row = document.createElement("div");
@@ -106,77 +323,58 @@ fetch(APPS_SCRIPT_URL)
       const details = document.createElement("div");
       details.className = "details";
 
+      let reportButtonHTML = "";
+      if (player.full_report) {
+        reportButtonHTML = `<button class="report-btn">Click for full report</button>`;
+      }
+
       details.innerHTML = `
         <h4>Scouting Report</h4>
         <p>${player.report || "No report available"}</p>
-        ${player.full_report ? `<button class="report-btn" id="fullreport-${player.rank}">Click for full report</button>` : ""}
-        <div class="bio"><strong>Bio:</strong> ${[player.height, player.weight ? player.weight + " lbs" : ""].filter(Boolean).join(" / ")} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}</div>
+        ${reportButtonHTML}
+        <div class="bio">
+          <strong>Bio:</strong>
+          ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
+        </div>
+
         <div class="links">
           ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
-          ${player.analytics_link ? `<a href="#" id="analytics-${player.rank}" rel="noopener noreferrer">Analytics</a>` : ""}
-          ${player.video_link ? `<a href="${player.video_link}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
+          ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank" rel="noopener noreferrer">Analytics</a>` : ""}
+          ${player.video_link ? `<a href="${player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
           ${player.stats_link ? `<a href="${player.stats_link}" target="_blank" rel="noopener noreferrer">Stats</a>` : ""}
         </div>
       `;
 
-      row.addEventListener("click", () => details.classList.toggle("open"));
+      row.addEventListener("click", () => {
+        details.classList.toggle("open");
+      });
 
       board.appendChild(row);
       board.appendChild(details);
 
-      // Attach buttons after insertion
-      if (player.full_report) {
+      // Add event listener to report button AFTER it's in the DOM
+      setTimeout(() => {
         const reportBtn = details.querySelector(`#fullreport-${player.rank}`);
-        if (reportBtn) reportBtn.addEventListener("click", e => {
-          e.stopPropagation();
-          openReportModal(player.name, player.full_report);
-        });
-      }
+        if (reportBtn) {
+          reportBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openReportModal(player.name, player.full_report);
+          });
+        }
 
-      if (player.analytics_link) {
+        // Add event listener to analytics button AFTER it's in the DOM
         const analyticsBtn = details.querySelector(`#analytics-${player.rank}`);
-        if (analyticsBtn) analyticsBtn.addEventListener("click", e => {
-          e.preventDefault();
-          e.stopPropagation();
-          openPdfModal(player.analytics_link);
-        });
-      }
+        if (analyticsBtn) {
+          analyticsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Analytics clicked, opening PDF:", player.analytics_link);
+            openPdfModal(player.analytics_link);
+          });
+        }
+      }, 0);
     });
-  })
-  .catch(err => {
-    showError("Failed to load data. Check your internet connection and Apps Script URL.");
-    console.error(err);
-  });
-
-function showError(msg) {
-  document.getElementById("error-container").innerHTML = `<div class="error">${msg}</div>`;
-}
-
-function openReportModal(name, text) {
-  document.getElementById("modalPlayerName").textContent = name;
-  document.getElementById("modalReportText").textContent = text;
-  document.getElementById("reportModal").classList.add("open");
-}
-
-function closeReportModal() { document.getElementById("reportModal").classList.remove("open"); }
-
-function openPdfModal(url) {
-  document.getElementById("pdfFrame").src = url;
-  document.getElementById("pdfModal").classList.add("open");
-}
-
-function closePdfModal() {
-  document.getElementById("pdfModal").classList.remove("open");
-  document.getElementById("pdfFrame").src = "";
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-  const reportModal = document.getElementById("reportModal");
-  const pdfModal = document.getElementById("pdfModal");
-  if(event.target === reportModal) closeReportModal();
-  if(event.target === pdfModal) closePdfModal();
-}
+  }
 </script>
 
 </body>
