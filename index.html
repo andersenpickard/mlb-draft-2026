@@ -168,7 +168,6 @@
           return;
         }
 
-        console.log(players); // Debug: check parsed player data
         renderBoard(players);
       } catch (err) {
         showError("Error parsing data: " + err.message);
@@ -180,14 +179,23 @@
       console.error(err);
     });
 
-  // Robust CSV parser for quoted values with commas
   function parseCSVLine(line) {
-    const regex = /(?:\"([^\"]*)\")|([^,]+)/g;
     const result = [];
-    let match;
-    while ((match = regex.exec(line)) !== null) {
-      result.push(match[1] !== undefined ? match[1] : (match[2] !== undefined ? match[2] : ""));
+    let current = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === ',' && !insideQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
     }
+    result.push(current.trim());
     return result;
   }
 
@@ -221,4 +229,25 @@
         <p>${player.report || "No report available"}</p>
         <div class="bio">
           <strong>Bio:</strong>
-          ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Bo
+          ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
+        </div>
+        <div class="links">
+          ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
+          ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank" rel="noopener noreferrer">Analytics</a>` : ""}
+          ${player.video_link ? `<a href="${player.video_link}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
+          ${player.stats_link ? `<a href="${player.stats_link}" target="_blank" rel="noopener noreferrer">Stats</a>` : ""}
+        </div>
+      `;
+
+      row.addEventListener("click", () => {
+        details.classList.toggle("open");
+      });
+
+      board.appendChild(row);
+      board.appendChild(details);
+    });
+  }
+</script>
+
+</body>
+</html>
