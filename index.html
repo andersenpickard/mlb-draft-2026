@@ -360,6 +360,16 @@
           openReportModal(player.name, player.full_report);
         });
       }
+
+      // Add event listener to analytics button
+      const analyticsBtn = details.querySelector(".analytics-btn");
+      if (analyticsBtn) {
+        analyticsBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const pdfUrl = analyticsBtn.getAttribute("data-pdf-url");
+          openPdfModal(pdfUrl);
+        });
+      }
     });
   }
 </script>
