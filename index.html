@@ -11,11 +11,12 @@
       padding: 20px 16px;
       background: #f5f7fa;
       color: #1f2933;
+      font-size: 14px;
     }
 
     h1 {
       margin-bottom: 16px;
-      font-size: clamp(24px, 5vw, 32px);
+      font-size: clamp(22px, 4vw, 28px);
       text-align: center;
     }
 
@@ -28,8 +29,8 @@
 
     .search-box {
       width: 100%;
-      padding: 14px 16px;
-      font-size: 16px;
+      padding: 12px 16px;
+      font-size: 15px;
       border: 2px solid #e5e7eb;
       border-radius: 8px;
       background: white;
@@ -40,10 +41,11 @@
 
     #modalReportText {
       white-space: pre-line;
-      line-height: 1.6;
+      line-height: 1.5;
       max-height: 400px;
       overflow-y: auto;
       padding-right: 8px;
+      font-size: 13px;
     }
 
     .search-box:focus {
@@ -69,28 +71,30 @@
 
     .board-table {
       width: 100%;
-      min-width: 800px;
+      min-width: 900px;
       border-collapse: collapse;
     }
 
     .board-table th,
     .board-table td {
-      padding: 14px 12px;
+      padding: 10px 8px;
       text-align: left;
       border-bottom: 1px solid #e5e7eb;
       vertical-align: middle;
+      font-size: 13px;
+      white-space: nowrap;
     }
 
     .board-table th {
       background: #111827;
       color: white;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12px;
       text-transform: uppercase;
       position: sticky;
       top: 0;
       z-index: 10;
-      white-space: nowrap;
+      padding: 12px 8px;
     }
 
     .board-table th.sortable {
@@ -104,8 +108,8 @@
     }
 
     .sort-indicator {
-      font-size: 10px;
-      margin-left: 4px;
+      font-size: 9px;
+      margin-left: 3px;
       opacity: 0.6;
     }
 
@@ -120,64 +124,53 @@
 
     .player-name {
       font-weight: 600;
-      min-width: 150px;
+      min-width: 130px;
     }
 
     .fv {
       font-weight: 700;
       color: #2563eb;
+      min-width: 40px;
     }
 
     .position {
-      min-width: 60px;
+      min-width: 40px;
     }
 
     .school {
-      min-width: 120px;
+      min-width: 100px;
+    }
+
+    .age-col {
+      min-width: 40px;
+    }
+
+    .height-col {
+      min-width: 60px;
+    }
+
+    .weight-col {
+      min-width: 60px;
+    }
+
+    .bat-col {
+      min-width: 40px;
+    }
+
+    .throw-col {
+      min-width: 40px;
+    }
+
+    .rank-col {
+      min-width: 35px;
+      text-align: center;
     }
 
     /* Mobile-optimized columns */
     @media (max-width: 768px) {
-      .board-table th:nth-child(4), /* School column */
-      .board-table td:nth-child(4) {
-        display: none;
-      }
-      
-      .board-table th:nth-child(7), /* Height */
-      .board-table td:nth-child(7),
-      .board-table th:nth-child(8), /* Weight */
-      .board-table td:nth-child(8) {
-        display: none;
-      }
-      
       .board {
         border-radius: 6px;
-      }
-      
-      .board-table th,
-      .board-table td {
-        padding: 12px 8px;
-        font-size: 13px;
-      }
-      
-      .player-name {
-        min-width: 120px;
-      }
-    }
-
-    /* Very small screens */
-    @media (max-width: 480px) {
-      body {
-        padding: 16px 12px;
-      }
-      
-      .board-table th:nth-child(6), /* Age */
-      .board-table td:nth-child(6),
-      .board-table th:nth-child(9), /* Bats */
-      .board-table td:nth-child(9),
-      .board-table th:nth-child(10), /* Throws */
-      .board-table td:nth-child(10) {
-        display: none;
+        min-width: 600px;
       }
       
       .board-table th,
@@ -187,15 +180,40 @@
       }
       
       .player-name {
+        min-width: 110px;
+      }
+      
+      .school {
+        min-width: 90px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px 10px;
+      }
+      
+      .board-table th,
+      .board-table td {
+        padding: 8px 5px;
+        font-size: 11px;
+      }
+      
+      .player-name {
         min-width: 100px;
+      }
+      
+      .school {
+        min-width: 80px;
       }
     }
 
     .details {
       background: #f9fafb;
-      padding: 20px;
+      padding: 16px;
       display: none;
-      font-size: 14px;
+      font-size: 13px;
       border-bottom: 1px solid #e5e7eb;
       width: 100%;
       box-sizing: border-box;
@@ -207,48 +225,54 @@
 
     .details h4 {
       margin-top: 0;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: #111827;
-      font-size: 16px;
+      font-size: 15px;
+    }
+
+    .scouting-summary {
+      margin-bottom: 16px;
+      color: #374151;
+      line-height: 1.5;
+      font-size: 12.5px; /* Smaller font for scouting summary */
     }
 
     .bio {
       margin-bottom: 16px;
       color: #374151;
-      padding: 12px;
+      padding: 10px;
       background: white;
       border-radius: 6px;
       border-left: 4px solid #2563eb;
+      font-size: 12.5px; /* Smaller font for bio */
     }
 
     .action-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       margin-top: 16px;
     }
 
     .action-btn {
       background: #2563eb;
       color: white;
-      padding: 10px 18px;
+      padding: 8px 14px;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 12px;
       text-decoration: none;
       display: inline-block;
       text-align: center;
       transition: all 0.15s ease;
       flex: 1;
-      min-width: 140px;
+      min-width: 120px;
     }
 
     .action-btn:hover {
       background: #1d4ed8;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
 
     .action-btn.secondary {
@@ -267,7 +291,13 @@
       
       .action-btn {
         min-width: 100%;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+      
+      .details {
+        padding: 14px;
       }
     }
 
@@ -292,7 +322,7 @@
 
     .modal-content {
       background-color: white;
-      padding: 24px;
+      padding: 20px;
       border-radius: 8px;
       max-width: 600px;
       width: 100%;
@@ -303,7 +333,7 @@
 
     @media (max-width: 768px) {
       .modal-content {
-        padding: 20px;
+        padding: 16px;
       }
     }
 
@@ -311,23 +341,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .modal-header h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .close-btn {
       background: none;
       border: none;
-      font-size: 28px;
+      font-size: 24px;
       cursor: pointer;
       color: #666;
       padding: 0;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -352,17 +382,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 24px;
+      padding: 14px 20px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .error {
       color: #dc2626;
-      padding: 16px;
+      padding: 14px;
       background: #fee2e2;
       border-radius: 8px;
       margin-bottom: 16px;
       text-align: center;
+      font-size: 13px;
     }
 
     .loading {
@@ -375,20 +406,21 @@
       border: 3px solid #f3f3f3;
       border-top: 3px solid #2563eb;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       animation: spin 1s linear infinite;
       margin: 0 auto 16px;
     }
 
     .no-results {
       text-align: center;
-      padding: 40px;
+      padding: 30px;
       color: #6b7280;
       font-style: italic;
       background: white;
       border-radius: 8px;
       margin-top: 20px;
+      font-size: 14px;
     }
 
     @keyframes spin {
@@ -400,8 +432,8 @@
     .social-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 20px;
       max-width: 1300px;
       margin-left: auto;
       margin-right: auto;
@@ -411,17 +443,17 @@
     .social-link {
       background: #000;
       color: white;
-      padding: 12px 20px;
+      padding: 10px 16px;
       border-radius: 6px;
       text-decoration: none;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 13px;
       transition: all 0.15s ease;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex: 1;
-      min-width: 120px;
+      min-width: 100px;
       justify-content: center;
       text-align: center;
     }
@@ -457,6 +489,7 @@
       
       .social-link {
         min-width: 100%;
+        padding: 12px 16px;
       }
     }
 
@@ -465,9 +498,9 @@
       display: none;
       text-align: center;
       color: #6b7280;
-      font-size: 12px;
-      margin-top: 8px;
-      padding: 8px;
+      font-size: 11px;
+      margin-top: 6px;
+      padding: 6px;
       background: rgba(0,0,0,0.05);
       border-radius: 4px;
     }
@@ -523,16 +556,16 @@
   <table class="board-table">
     <thead>
       <tr>
-        <th class="sortable" data-sort="rank"># <span class="sort-indicator"></span></th>
+        <th class="sortable rank-col" data-sort="rank"># <span class="sort-indicator"></span></th>
         <th class="sortable" data-sort="name">Name <span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="position">Pos <span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="school">School <span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="fv">FV <span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="age">Age <span class="sort-indicator"></span></th>
-        <th>Height</th>
-        <th>Weight</th>
-        <th>Bats</th>
-        <th>Throws</th>
+        <th class="sortable position" data-sort="position">Pos <span class="sort-indicator"></span></th>
+        <th class="sortable school" data-sort="school">School <span class="sort-indicator"></span></th>
+        <th class="sortable fv" data-sort="fv">FV <span class="sort-indicator"></span></th>
+        <th class="sortable age-col" data-sort="age">Age <span class="sort-indicator"></span></th>
+        <th class="height-col">Height</th>
+        <th class="weight-col">Weight</th>
+        <th class="bat-col">Bats</th>
+        <th class="throw-col">Throws</th>
       </tr>
     </thead>
     <tbody id="board-body">
@@ -786,16 +819,16 @@
       row.dataset.playerId = player.id || player.name;
       
       row.innerHTML = `
-        <td>${player.rank || ""}</td>
+        <td class="rank-col">${player.rank || ""}</td>
         <td class="player-name">${player.name || ""}</td>
         <td class="position">${player.position || ""}</td>
         <td class="school">${player.school || ""}</td>
         <td class="fv">${player.fv || ""}</td>
-        <td>${player.age || ""}</td>
-        <td>${player.height || ""}</td>
-        <td>${player.weight || ""}</td>
-        <td>${player.bat_hand || ""}</td>
-        <td>${player.throw_hand || ""}</td>
+        <td class="age-col">${player.age || ""}</td>
+        <td class="height-col">${player.height || ""}</td>
+        <td class="weight-col">${player.weight || ""}</td>
+        <td class="bat-col">${player.bat_hand || ""}</td>
+        <td class="throw-col">${player.throw_hand || ""}</td>
       `;
 
       const detailsRow = document.createElement("tr");
@@ -831,7 +864,9 @@
 
       details.innerHTML = `
         <h4>Scouting Summary</h4>
-        <p>${player.report || "No report available"}</p>
+        <div class="scouting-summary">
+          ${player.report || "No report available"}
+        </div>
         
         <div class="bio">
           <strong>Bio:</strong>
