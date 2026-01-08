@@ -1,28 +1,4 @@
-function showError(message) {
-    const container = document.getElementById("error-container");
-    container.innerHTML = `<div class="error">${message}</div>`;
-    const loading = document.querySelector(".loading");
-    if (loading) loading.remove();
-  }
-
-  function openReportModal(playerName, reportText) {
-    document.getElementById("modalPlayerName").textContent = playerName;
-    document.getElementById("modalReportText").textContent = reportText;
-    document.getElementById("reportModal").classList.add("open");
-  }
-
-  function closeReportModal() {
-    document.getElementById("reportModal").classList.remove("open");
-  }
-
-  window.onclick = function(event) {
-    const modal = document.getElementById("reportModal");
-    if (event.target === modal) {
-      modal.classList.remove("open");
-    }
-  }
-
-  function renderBoard(players) {<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -148,12 +124,12 @@ function showError(message) {
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
     }
 
     .modal.open {
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .modal-content {
@@ -262,7 +238,6 @@ function showError(message) {
     .then(res => res.json())
     .then(players => {
       console.log("Loaded players:", players.length);
-      console.log("First player:", players[0]);
       if (players.length === 0) {
         showError("No player data found. Check your spreadsheet has data.");
         return;
@@ -280,6 +255,25 @@ function showError(message) {
     const loading = document.querySelector(".loading");
     if (loading) loading.remove();
   }
+
+  function openReportModal(playerName, reportText) {
+    document.getElementById("modalPlayerName").textContent = playerName;
+    document.getElementById("modalReportText").textContent = reportText;
+    document.getElementById("reportModal").classList.add("open");
+  }
+
+  function closeReportModal() {
+    document.getElementById("reportModal").classList.remove("open");
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("reportModal");
+    if (event.target === modal) {
+      modal.classList.remove("open");
+    }
+  }
+
+  function renderBoard(players) {
     const board = document.getElementById("board");
     const loading = board.querySelector(".loading");
     if (loading) loading.remove();
@@ -304,10 +298,15 @@ function showError(message) {
       const details = document.createElement("div");
       details.className = "details";
 
+      let reportButtonHTML = "";
+      if (player.full_report) {
+        reportButtonHTML = `<button class="report-btn" onclick="openReportModal('${player.name.replace(/'/g, "\\'")}', '${player.full_report.replace(/'/g, "\\'")}')">Click for full report</button>`;
+      }
+
       details.innerHTML = `
         <h4>Scouting Report</h4>
         <p>${player.report || "No report available"}</p>
-        ${player.full_report ? `<button class="report-btn" onclick="openReportModal('${player.name}', '${player.full_report.replace(/'/g, "\\'")}')">Click for full report</button>` : ""}
+        ${reportButtonHTML}
         <div class="bio">
           <strong>Bio:</strong>
           ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
