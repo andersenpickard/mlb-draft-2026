@@ -106,6 +106,27 @@
       border-radius: 8px;
       margin-bottom: 16px;
     }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #2563eb;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -123,91 +144,41 @@
     <div>FV</div>
     <div>Throws</div>
   </div>
+  <div class="loading">
+    <div class="spinner"></div>
+    Loading your draft board...
+  </div>
 </div>
 
 <script>
-  const SHEET_ID = "1o581SSiEJJCtwXkeBF-UQxrBnUfUrQgAVOsdcInzx0E";
-  const SHEET_GID = "492241520";
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${SHEET_GID}&tqx=out:json`;
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-FXxG8fQKDWOkOr0qFffpsGu0jit-GuhErPpcoGnADlA_oPMBBRvL7xo_OW7QbA0dKQ/exec";
 
-  fetch(SHEET_URL)
-    .then(res => res.text())
-    .then(text => {
-      try {
-        const lines = text.trim().split('\n');
-        if (lines.length < 2) {
-          showError("No data found in spreadsheet. Make sure it has at least one player row.");
-          return;
-        }
-
-        // Parse CSV
-        const players = [];
-        for (let i = 1; i < lines.length; i++) {
-          const values = parseCSVLine(lines[i]);
-          if (values[1]) { // Check if name exists
-            players.push({
-              rank: values[0] || "",
-              name: values[1] || "",
-              position: values[2] || "",
-              school: values[3] || "",
-              fv: values[4] || "",
-              age: values[5] || "",
-              height: values[6] || "",
-              weight: values[7] || "",
-              bat_hand: values[8] || "",
-              throw_hand: values[9] || "",
-              report: values[10] || "",
-              report_link: values[11] || "",
-              analytics_link: values[12] || "",
-              video_link: values[13] || "",
-              stats_link: values[14] || ""
-            });
-          }
-        }
-
-        if (players.length === 0) {
-          showError("No valid player data found. Check your spreadsheet format.");
-          return;
-        }
-
-        renderBoard(players);
-      } catch (err) {
-        showError("Error parsing data: " + err.message);
-        console.error(err);
+  fetch(APPS_SCRIPT_URL)
+    .then(res => res.json())
+    .then(players => {
+      console.log("Loaded players:", players.length);
+      if (players.length === 0) {
+        showError("No player data found. Check your spreadsheet has data.");
+        return;
       }
+      renderBoard(players);
     })
     .catch(err => {
-      showError("Failed to fetch data. Check your internet connection and sheet permissions.");
+      showError("Failed to load data. Check your internet connection and Apps Script URL.");
       console.error(err);
     });
-
-  function parseCSVLine(line) {
-    const result = [];
-    let current = "";
-    let insideQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      if (char === '"') {
-        insideQuotes = !insideQuotes;
-      } else if (char === ',' && !insideQuotes) {
-        result.push(current.trim());
-        current = "";
-      } else {
-        current += char;
-      }
-    }
-    result.push(current.trim());
-    return result;
-  }
 
   function showError(message) {
     const container = document.getElementById("error-container");
     container.innerHTML = `<div class="error">${message}</div>`;
+    const loading = document.querySelector(".loading");
+    if (loading) loading.remove();
   }
 
   function renderBoard(players) {
     const board = document.getElementById("board");
+    const loading = board.querySelector(".loading");
+    if (loading) loading.remove();
 
     players.forEach(player => {
       const row = document.createElement("div");
