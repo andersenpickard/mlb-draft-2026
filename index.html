@@ -236,6 +236,16 @@
   </div>
 </div>
 
+<div id="pdfModal" class="modal">
+  <div class="modal-content" style="max-width: 900px; padding: 0;">
+    <div class="modal-header" style="padding: 16px 32px;">
+      <h2 style="margin: 0;">Analytics Report</h2>
+      <button class="close-btn" onclick="closePdfModal()">&times;</button>
+    </div>
+    <iframe id="pdfFrame" width="100%" height="600px" style="border: none;"></iframe>
+  </div>
+</div>
+
 <script>
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPoECCo_lX-hwSa9bI8z2KcHVeeFa76m3dQeR9DVjdoxh1qkME0QIvJnNKSL9WwZZ-bQ/exec";
 
@@ -269,6 +279,16 @@
 
   function closeReportModal() {
     document.getElementById("reportModal").classList.remove("open");
+  }
+
+  function openPdfModal(pdfUrl) {
+    document.getElementById("pdfFrame").src = pdfUrl;
+    document.getElementById("pdfModal").classList.add("open");
+  }
+
+  function closePdfModal() {
+    document.getElementById("pdfModal").classList.remove("open");
+    document.getElementById("pdfFrame").src = "";
   }
 
   window.onclick = function(event) {
