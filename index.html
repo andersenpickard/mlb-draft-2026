@@ -300,7 +300,7 @@
 
       let reportButtonHTML = "";
       if (player.full_report) {
-        reportButtonHTML = `<button class="report-btn" data-player-name="${player.name}" data-report-text="${player.full_report}">Click for full report</button>`;
+        reportButtonHTML = `<button class="report-btn">Click for full report</button>`;
       }
 
       details.innerHTML = `
@@ -331,9 +331,7 @@
       if (reportBtn) {
         reportBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          const playerName = reportBtn.getAttribute("data-player-name");
-          const reportText = reportBtn.getAttribute("data-report-text");
-          openReportModal(playerName, reportText);
+          openReportModal(player.name, player.full_report);
         });
       }
     });
