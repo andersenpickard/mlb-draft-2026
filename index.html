@@ -127,48 +127,79 @@
 
 <script>
   const SHEET_ID = "1o581SSiEJJCtwXkeBF-UQxrBnUfUrQgAVOsdcInzx0E";
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=492241520&tqx=out:json`;
+  const SHEET_GID = "492241520";
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
 
   fetch(SHEET_URL)
     .then(res => res.text())
     .then(text => {
       try {
-        // Handle Google Sheets API response format
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        const rows = json.table?.rows || [];
-
-        if (rows.length === 0) {
-          showError("No data found in spreadsheet. Check your Sheet ID and permissions.");
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) {
+          showError("No data found in spreadsheet. Make sure it has at least one player row.");
           return;
         }
 
-        const players = rows.map(r => ({
-          rank: r.c[0]?.v,
-          name: r.c[1]?.v,
-          position: r.c[2]?.v,
-          school: r.c[3]?.v,
-          fv: r.c[4]?.v,
-          age: r.c[5]?.v,
-          height: r.c[6]?.v,
-          weight: r.c[7]?.v,
-          bat_hand: r.c[8]?.v,
-          throw_hand: r.c[9]?.v,
-          report: r.c[10]?.v,
-          report_link: r.c[11]?.v,
-          analytics_link: r.c[12]?.v,
-          video_link: r.c[13]?.v,
-          stats_link: r.c[14]?.v
-        }));
+        // Parse CSV
+        const players = [];
+        for (let i = 1; i < lines.length; i++) {
+          const values = parseCSVLine(lines[i]);
+          if (values[1]) { // Check if name exists
+            players.push({
+              rank: values[0] || "",
+              name: values[1] || "",
+              position: values[2] || "",
+              school: values[3] || "",
+              fv: values[4] || "",
+              age: values[5] || "",
+              height: values[6] || "",
+              weight: values[7] || "",
+              bat_hand: values[8] || "",
+              throw_hand: values[9] || "",
+              report: values[10] || "",
+              report_link: values[11] || "",
+              analytics_link: values[12] || "",
+              video_link: values[13] || "",
+              stats_link: values[14] || ""
+            });
+          }
+        }
+
+        if (players.length === 0) {
+          showError("No valid player data found. Check your spreadsheet format.");
+          return;
+        }
 
         renderBoard(players);
       } catch (err) {
         showError("Error parsing data: " + err.message);
+        console.error(err);
       }
     })
     .catch(err => {
       showError("Failed to fetch data. Check your internet connection and sheet permissions.");
       console.error(err);
     });
+
+  function parseCSVLine(line) {
+    const result = [];
+    let current = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === ',' && !insideQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  }
 
   function showError(message) {
     const container = document.getElementById("error-container");
