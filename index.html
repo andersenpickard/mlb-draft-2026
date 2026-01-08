@@ -87,19 +87,18 @@
       color: #374151;
     }
 
-    .links a {
-      display: inline-block;
-      margin-right: 18px;
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 500;
+    .links {
+      margin-top: 16px;
     }
 
-    .links a:hover {
-      text-decoration: underline;
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
     }
 
-    .report-btn {
+    .action-btn {
       background: #2563eb;
       color: white;
       padding: 8px 16px;
@@ -108,16 +107,23 @@
       cursor: pointer;
       font-weight: 500;
       font-size: 14px;
-      margin-top: 8px;
-      margin-right: 8px;
       text-decoration: none;
       display: inline-block;
       text-align: center;
+      transition: background 0.15s ease;
     }
 
-    .report-btn:hover {
+    .action-btn:hover {
       background: #1d4ed8;
       text-decoration: none;
+    }
+
+    .action-btn.secondary {
+      background: #6b7280;
+    }
+
+    .action-btn.secondary:hover {
+      background: #4b5563;
     }
 
     .modal {
@@ -291,10 +297,19 @@
     document.getElementById("pdfFrame").src = "";
   }
 
+  function openLinkInNewTab(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
   window.onclick = function(event) {
-    const modal = document.getElementById("reportModal");
-    if (event.target === modal) {
-      modal.classList.remove("open");
+    const reportModal = document.getElementById("reportModal");
+    const pdfModal = document.getElementById("pdfModal");
+    
+    if (event.target === reportModal) {
+      reportModal.classList.remove("open");
+    }
+    if (event.target === pdfModal) {
+      pdfModal.classList.remove("open");
     }
   }
 
@@ -323,25 +338,40 @@
       const details = document.createElement("div");
       details.className = "details";
 
-      let reportButtonHTML = "";
+      // Create action buttons HTML
+      const actionButtons = [];
+      
       if (player.full_report) {
-        reportButtonHTML = `<button class="report-btn">Click for full report</button>`;
+        actionButtons.push(`<button class="action-btn" data-action="full-report">Click for full report</button>`);
+      }
+      
+      if (player.analytics_link) {
+        actionButtons.push(`<button class="action-btn secondary" data-action="analytics">Analytics</button>`);
+      }
+      
+      if (player.video_link) {
+        actionButtons.push(`<button class="action-btn secondary" data-action="video">Video</button>`);
+      }
+      
+      if (player.report_link) {
+        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Full Report Link</button>`);
+      }
+      
+      if (player.stats_link) {
+        actionButtons.push(`<button class="action-btn secondary" data-action="stats">Stats</button>`);
       }
 
       details.innerHTML = `
         <h4>Scouting Report</h4>
         <p>${player.report || "No report available"}</p>
-        ${reportButtonHTML}
+        
         <div class="bio">
           <strong>Bio:</strong>
           ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
         </div>
 
-        <div class="links">
-          ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
-          ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank" rel="noopener noreferrer">Analytics</a>` : ""}
-          ${player.video_link ? `<a href="${player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
-          ${player.stats_link ? `<a href="${player.stats_link}" target="_blank" rel="noopener noreferrer">Stats</a>` : ""}
+        <div class="action-buttons">
+          ${actionButtons.join('')}
         </div>
       `;
 
@@ -352,26 +382,53 @@
       board.appendChild(row);
       board.appendChild(details);
 
-      // Add event listener to report button AFTER it's in the DOM
+      // Add event listeners to buttons AFTER they're in the DOM
       setTimeout(() => {
-        const reportBtn = details.querySelector(`#fullreport-${player.rank}`);
-        if (reportBtn) {
-          reportBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            openReportModal(player.name, player.full_report);
+        const buttons = details.querySelectorAll('.action-btn');
+        
+        buttons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent row toggle
+            
+            const action = button.getAttribute('data-action');
+            
+            switch(action) {
+              case 'full-report':
+                if (player.full_report) {
+                  openReportModal(player.name, player.full_report);
+                }
+                break;
+                
+              case 'analytics':
+                if (player.analytics_link) {
+                  openPdfModal(player.analytics_link);
+                }
+                break;
+                
+              case 'video':
+                if (player.video_link) {
+                  // Convert embed URL to watch URL if needed
+                  const videoUrl = player.video_link.includes('youtube.com/embed/') 
+                    ? player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')
+                    : player.video_link;
+                  openLinkInNewTab(videoUrl);
+                }
+                break;
+                
+              case 'full-report-link':
+                if (player.report_link) {
+                  openLinkInNewTab(player.report_link);
+                }
+                break;
+                
+              case 'stats':
+                if (player.stats_link) {
+                  openLinkInNewTab(player.stats_link);
+                }
+                break;
+            }
           });
-        }
-
-        // Add event listener to analytics button AFTER it's in the DOM
-        const analyticsBtn = details.querySelector(`#analytics-${player.rank}`);
-        if (analyticsBtn) {
-          analyticsBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("Analytics clicked, opening PDF:", player.analytics_link);
-            openPdfModal(player.analytics_link);
-          });
-        }
+        });
       }, 0);
     });
   }
