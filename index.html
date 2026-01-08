@@ -157,6 +157,7 @@
     .then(res => res.json())
     .then(players => {
       console.log("Loaded players:", players.length);
+      console.log("First player:", players[0]);
       if (players.length === 0) {
         showError("No player data found. Check your spreadsheet has data.");
         return;
