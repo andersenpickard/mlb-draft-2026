@@ -365,8 +365,10 @@
       const analyticsBtn = details.querySelector(".analytics-btn");
       if (analyticsBtn) {
         analyticsBtn.addEventListener("click", (e) => {
+          e.preventDefault();
           e.stopPropagation();
           const pdfUrl = analyticsBtn.getAttribute("data-pdf-url");
+          console.log("Opening PDF:", pdfUrl);
           openPdfModal(pdfUrl);
         });
       }
