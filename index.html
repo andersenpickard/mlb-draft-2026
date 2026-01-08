@@ -36,11 +36,11 @@
     }
 
     #modalReportText {
-      white-space: pre-line;
       line-height: 1.6;
       max-height: 400px;
       overflow-y: auto;
       padding-right: 8px;
+      margin-top: 0;
     }
 
     .search-box:focus {
@@ -548,7 +548,12 @@
 
   function openReportModal(playerName, reportText) {
     document.getElementById("modalPlayerName").textContent = playerName;
-    document.getElementById("modalReportText").textContent = reportText;
+    
+    let formattedText = reportText || "";
+    formattedText = formattedText.replace(/\r\n|\r|\n/g, '\n\n');
+    formattedText = formattedText.replace(/\n\n/g, '<br><br>');
+    formattedText = formattedText.replace(/\n/g, '<br>');
+    document.getElementById("modalReportText").innerHTML = formattedText;
     document.getElementById("reportModal").classList.add("open");
   }
 
