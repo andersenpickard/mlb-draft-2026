@@ -437,7 +437,6 @@
     ascending: true
   };
 
-  // Search functionality
   let searchTimeout;
   const searchBox = document.getElementById('searchBox');
   
@@ -446,10 +445,9 @@
     searchTimeout = setTimeout(() => {
       const searchTerm = this.value.toLowerCase().trim();
       filterAndDisplayPlayers(searchTerm);
-    }, 300); // 300ms debounce delay
+    }, 300); 
   });
 
-  // Also trigger search on Enter key
   searchBox.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       clearTimeout(searchTimeout);
@@ -460,7 +458,6 @@
 
   function filterAndDisplayPlayers(searchTerm) {
     if (!searchTerm) {
-      // If search is empty, show all players
       clearBoard();
       renderPlayers(allPlayers);
       return;
@@ -497,7 +494,6 @@
       let aVal = a[column];
       let bVal = b[column];
 
-      // Handle numeric values for rank, fv, and age
       if (column === 'rank' || column === 'fv' || column === 'age') {
         aVal = parseInt(aVal) || 999999;
         bVal = parseInt(bVal) || 999999;
@@ -508,7 +504,6 @@
           return bVal - aVal;
         }
       } else {
-        // String sorting for name, position, and school
         aVal = (aVal || '').toString().toLowerCase().trim();
         bVal = (bVal || '').toString().toLowerCase().trim();
         
@@ -592,7 +587,6 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
-  // Close modals when clicking outside
   window.onclick = function(event) {
     const reportModal = document.getElementById("reportModal");
     const pdfModal = document.getElementById("pdfModal");
@@ -605,7 +599,6 @@
     }
   }
 
-  // Close modals with Escape key
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
       closeReportModal();
@@ -620,14 +613,13 @@
 
     renderPlayers(players);
 
-    // Add header click listeners AFTER rendering
     setTimeout(() => {
       const headerDivs = document.querySelectorAll('.header > div[data-sort]');
       headerDivs.forEach(header => {
         header.addEventListener('click', () => {
           const column = header.getAttribute('data-sort');
           const sortedPlayers = sortPlayers(allPlayers, column);
-          allPlayers = sortedPlayers; // Update the master list
+          allPlayers = sortedPlayers;
           clearBoard();
           const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
           if (currentSearch) {
@@ -674,7 +666,6 @@
         const details = document.createElement("div");
         details.className = "details";
 
-        // Create action buttons HTML
         const actionButtons = [];
 
         if (player.full_report) {
@@ -697,7 +688,6 @@
             actionButtons.push(`<button class="action-btn secondary" data-action="stats">Stats</button>`);
         }
 
-        // Create tools display
         const tools = [];
         const toolLabels = {
             hit: 'Hit',
@@ -712,13 +702,10 @@
             ctrl: 'Control'
         };
 
-        // Group tools by type (hitting vs pitching)
         const hittingTools = ['hit', 'pow', 'fld', 'arm', 'run'];
         const pitchingTools = ['fb', 'sl', 'cb', 'ch', 'ctrl'];
 
-        // Check if player has any hitting tools
         const hasHittingTools = hittingTools.some(tool => player[tool] && player[tool].toString().trim() !== '');
-        // Check if player has any pitching tools  
         const hasPitchingTools = pitchingTools.some(tool => player[tool] && player[tool].toString().trim() !== '');
 
         let toolsHTML = '';
@@ -729,7 +716,6 @@
           <strong>Tools:</strong><br>
       `;
 
-            // Add hitting tools if they exist
             if (hasHittingTools) {
                 const hittingToolItems = [];
                 hittingTools.forEach(tool => {
@@ -742,7 +728,6 @@
                 }
             }
 
-            // Add pitching tools if they exist
             if (hasPitchingTools) {
                 const pitchingToolItems = [];
                 pitchingTools.forEach(tool => {
@@ -782,13 +767,12 @@
         board.appendChild(row);
         board.appendChild(details);
 
-        // Add event listeners to buttons AFTER they're in the DOM
         setTimeout(() => {
             const buttons = details.querySelectorAll('.action-btn');
 
             buttons.forEach(button => {
                 button.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent row toggle
+                    e.stopPropagation(); 
 
                     const action = button.getAttribute('data-action');
 
@@ -807,7 +791,6 @@
 
                         case 'video':
                             if (player.video_link) {
-                                // Convert embed URL to watch URL if needed
                                 const videoUrl = player.video_link.includes('youtube.com/embed/') ?
                                     player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=') :
                                     player.video_link;
@@ -836,6 +819,3 @@
 
 </body>
 </html>
-
-
-
