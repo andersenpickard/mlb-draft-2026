@@ -36,11 +36,11 @@
     }
 
     #modalReportText {
+      white-space: pre-line;
       line-height: 1.6;
       max-height: 400px;
       overflow-y: auto;
       padding-right: 8px;
-      margin-top: 0;
     }
 
     .search-box:focus {
@@ -548,16 +548,7 @@
 
   function openReportModal(playerName, reportText) {
     document.getElementById("modalPlayerName").textContent = playerName;
-    
-    let formattedText = reportText || "";
-    
-    // Handle all types of line breaks and make them double
-    formattedText = formattedText.replace(/\r\n|\r|\n/g, '<br><br>');
-    
-    // Also add spacing after paragraphs that end with periods
-    formattedText = formattedText.replace(/\.<br><br>/g, '.<br><br>');
-    
-    document.getElementById("modalReportText").innerHTML = formattedText;
+    document.getElementById("modalReportText").textContent = reportText;
     document.getElementById("reportModal").classList.add("open");
   }
 
@@ -759,4 +750,5 @@
 
 </body>
 </html>
+
 
