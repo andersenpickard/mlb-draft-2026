@@ -186,13 +186,13 @@
       row.className = "row";
 
       row.innerHTML = `
-        <div class="cell">${player.rank || ""}</div>
-        <div class="cell name">${player.name || ""}</div>
-        <div class="cell">${player.position || ""}</div>
-        <div class="cell">${player.school || ""}</div>
-        <div class="cell">${player.age || ""}</div>
-        <div class="cell fv">${player.fv || ""}</div>
-        <div class="cell">${player.throw_hand || ""}</div>
+        <div class="cell">${player.Rk || ""}</div>
+        <div class="cell name">${player.Player || ""}</div>
+        <div class="cell">${player.Pos || ""}</div>
+        <div class="cell">${player.School || ""}</div>
+        <div class="cell">${player.Age || ""}</div>
+        <div class="cell fv">${player.Grade || ""}</div>
+        <div class="cell">${player.Throws || ""}</div>
       `;
 
       const details = document.createElement("div");
@@ -200,10 +200,10 @@
 
       details.innerHTML = `
         <h4>Scouting Report</h4>
-        <p>${player.report || "No report available"}</p>
+        <p>${player.Notes || "No report available"}</p>
         <div class="bio">
           <strong>Bio:</strong>
-          ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
+          ${[player.Height, player.Weight ? `${player.Weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.Bats || "N/A"}, Throws ${player.Throws || "N/A"}
         </div>
         <div class="links">
           ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
