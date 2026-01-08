@@ -126,9 +126,7 @@
 </div>
 
 <script>
-  const SHEET_ID = "1o581SSiEJJCtwXkeBF-UQxrBnUfUrQgAVOsdcInzx0E";
-  const SHEET_GID = "492241520";
-  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+  const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBkt3LYeaR85hXDqOpd24cZvyESQOKtg3ahyhs0gC3V6VUWiOA9TiXuluPctZkNJ_tfZ2uatJckABA/pub?gid=492241520&single=true&output=csv";
 
   fetch(SHEET_URL)
     .then(res => res.text())
