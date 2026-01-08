@@ -353,7 +353,7 @@
       board.appendChild(details);
 
       // Add event listener to report button
-      const reportBtn = details.querySelector(".report-btn");
+      const reportBtn = details.querySelector(`#fullreport-${player.rank}`);
       if (reportBtn) {
         reportBtn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -362,14 +362,13 @@
       }
 
       // Add event listener to analytics button
-      const analyticsBtn = details.querySelector(".analytics-btn");
+      const analyticsBtn = details.querySelector(`#analytics-${player.rank}`);
       if (analyticsBtn) {
         analyticsBtn.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
-          const pdfUrl = analyticsBtn.getAttribute("data-pdf-url");
-          console.log("Opening PDF:", pdfUrl);
-          openPdfModal(pdfUrl);
+          console.log("Analytics clicked, opening PDF:", player.analytics_link);
+          openPdfModal(player.analytics_link);
         });
       }
     });
