@@ -550,10 +550,12 @@
     document.getElementById("modalPlayerName").textContent = playerName;
     
     let formattedText = reportText || "";
-    formattedText = formattedText.replace(/\n/g, '<br><br>');
-    formattedText = formattedText.replace(/\.\s+/g, '.<br><br>');
     
-    formattedText = formattedText.replace(/<br><br><br>/g, '<br><br>');
+    // Handle all types of line breaks and make them double
+    formattedText = formattedText.replace(/\r\n|\r|\n/g, '<br><br>');
+    
+    // Also add spacing after paragraphs that end with periods
+    formattedText = formattedText.replace(/\.<br><br>/g, '.<br><br>');
     
     document.getElementById("modalReportText").innerHTML = formattedText;
     document.getElementById("reportModal").classList.add("open");
