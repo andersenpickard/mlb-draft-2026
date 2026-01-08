@@ -8,17 +8,19 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
-      padding: 24px;
+      padding: 20px 16px;
       background: #f5f7fa;
       color: #1f2933;
     }
 
     h1 {
       margin-bottom: 16px;
+      font-size: clamp(24px, 5vw, 32px);
+      text-align: center;
     }
 
     .search-container {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       max-width: 1300px;
       margin-left: auto;
       margin-right: auto;
@@ -26,13 +28,14 @@
 
     .search-box {
       width: 100%;
-      padding: 12px 16px;
+      padding: 14px 16px;
       font-size: 16px;
       border: 2px solid #e5e7eb;
       border-radius: 8px;
       background: white;
       color: #1f2933;
       transition: border-color 0.15s ease;
+      box-sizing: border-box;
     }
 
     #modalReportText {
@@ -60,70 +63,142 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    .header, .row {
-      display: grid;
-      grid-template-columns: 50px 1.5fr 80px 1.3fr 50px 50px 70px 70px 70px 70px;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
+    .board-table {
+      width: 100%;
+      min-width: 800px;
+      border-collapse: collapse;
     }
 
-    .header {
+    .board-table th,
+    .board-table td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: middle;
+    }
+
+    .board-table th {
       background: #111827;
       color: white;
       font-weight: 600;
       font-size: 13px;
       text-transform: uppercase;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
     }
 
-    .header > div {
+    .board-table th.sortable {
       cursor: pointer;
       user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      transition: background-color 0.15s ease;
     }
 
-    .header > div:hover {
-      opacity: 0.8;
+    .board-table th.sortable:hover {
+      background: #1f2937;
     }
 
     .sort-indicator {
-      font-size: 12px;
+      font-size: 10px;
+      margin-left: 4px;
       opacity: 0.6;
     }
 
-    .row {
-      border-bottom: 1px solid #e5e7eb;
+    .board-table tr {
       cursor: pointer;
       transition: background 0.15s ease;
     }
 
-    .row:hover {
+    .board-table tr:hover {
       background: #f0f4f8;
     }
 
-    .cell {
-      font-size: 14px;
-    }
-
-    .name {
+    .player-name {
       font-weight: 600;
+      min-width: 150px;
     }
 
     .fv {
       font-weight: 700;
+      color: #2563eb;
+    }
+
+    .position {
+      min-width: 60px;
+    }
+
+    .school {
+      min-width: 120px;
+    }
+
+    /* Mobile-optimized columns */
+    @media (max-width: 768px) {
+      .board-table th:nth-child(4), /* School column */
+      .board-table td:nth-child(4) {
+        display: none;
+      }
+      
+      .board-table th:nth-child(7), /* Height */
+      .board-table td:nth-child(7),
+      .board-table th:nth-child(8), /* Weight */
+      .board-table td:nth-child(8) {
+        display: none;
+      }
+      
+      .board {
+        border-radius: 6px;
+      }
+      
+      .board-table th,
+      .board-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+      }
+      
+      .player-name {
+        min-width: 120px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 12px;
+      }
+      
+      .board-table th:nth-child(6), /* Age */
+      .board-table td:nth-child(6),
+      .board-table th:nth-child(9), /* Bats */
+      .board-table td:nth-child(9),
+      .board-table th:nth-child(10), /* Throws */
+      .board-table td:nth-child(10) {
+        display: none;
+      }
+      
+      .board-table th,
+      .board-table td {
+        padding: 10px 6px;
+        font-size: 12px;
+      }
+      
+      .player-name {
+        min-width: 100px;
+      }
     }
 
     .details {
-      grid-column: 1 / -1;
       background: #f9fafb;
-      padding: 16px 24px 20px;
+      padding: 20px;
       display: none;
       font-size: 14px;
       border-bottom: 1px solid #e5e7eb;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .details.open {
@@ -132,39 +207,48 @@
 
     .details h4 {
       margin-top: 0;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      color: #111827;
+      font-size: 16px;
     }
 
     .bio {
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       color: #374151;
+      padding: 12px;
+      background: white;
+      border-radius: 6px;
+      border-left: 4px solid #2563eb;
     }
 
     .action-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
+      margin-top: 16px;
     }
 
     .action-btn {
       background: #2563eb;
       color: white;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
       font-size: 14px;
       text-decoration: none;
       display: inline-block;
       text-align: center;
-      transition: background 0.15s ease;
+      transition: all 0.15s ease;
+      flex: 1;
+      min-width: 140px;
     }
 
     .action-btn:hover {
       background: #1d4ed8;
-      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
 
     .action-btn.secondary {
@@ -173,6 +257,18 @@
 
     .action-btn.secondary:hover {
       background: #4b5563;
+    }
+
+    /* Mobile button adjustments */
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        min-width: 100%;
+        margin-bottom: 8px;
+      }
     }
 
     .modal {
@@ -186,6 +282,8 @@
       background-color: rgba(0, 0, 0, 0.5);
       align-items: center;
       justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .modal.open {
@@ -194,25 +292,31 @@
 
     .modal-content {
       background-color: white;
-      padding: 32px;
+      padding: 24px;
       border-radius: 8px;
       max-width: 600px;
-      width: 90%;
+      width: 100%;
       max-height: 80vh;
       overflow-y: auto;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        padding: 20px;
+      }
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .modal-header h2 {
       margin: 0;
-      font-size: 24px;
+      font-size: 20px;
     }
 
     .close-btn {
@@ -221,6 +325,12 @@
       font-size: 28px;
       cursor: pointer;
       color: #666;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .close-btn:hover {
@@ -232,7 +342,7 @@
       background-color: white;
       border-radius: 8px;
       max-width: 900px;
-      width: 90%;
+      width: 100%;
       max-height: 90vh;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
@@ -242,7 +352,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 32px;
+      padding: 16px 24px;
       border-bottom: 1px solid #e5e7eb;
     }
 
@@ -252,6 +362,7 @@
       background: #fee2e2;
       border-radius: 8px;
       margin-bottom: 16px;
+      text-align: center;
     }
 
     .loading {
@@ -275,12 +386,96 @@
       padding: 40px;
       color: #6b7280;
       font-style: italic;
-      grid-column: 1 / -1;
+      background: white;
+      border-radius: 8px;
+      margin-top: 20px;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    /* Social Links */
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      max-width: 1300px;
+      margin-left: auto;
+      margin-right: auto;
+      justify-content: center;
+    }
+
+    .social-link {
+      background: #000;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 120px;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .social-link.twitter {
+      background: #000;
+    }
+    
+    .social-link.twitter:hover {
+      background: #222;
+    }
+    
+    .social-link.linkedin {
+      background: #0077b5;
+    }
+    
+    .social-link.linkedin:hover {
+      background: #0066a1;
+    }
+    
+    .social-link.portfolio {
+      background: #2563eb;
+    }
+    
+    .social-link.portfolio:hover {
+      background: #1d4ed8;
+    }
+
+    @media (max-width: 768px) {
+      .social-links {
+        flex-direction: column;
+      }
+      
+      .social-link {
+        min-width: 100%;
+      }
+    }
+
+    /* Mobile info hint */
+    .mobile-hint {
+      display: none;
+      text-align: center;
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 8px;
+      padding: 8px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-hint {
+        display: block;
+      }
     }
   </style>
 </head>
@@ -288,74 +483,25 @@
 
 <h1>Andersen Pickard's 2026 MLB Draft Big Board</h1>
 
-  <div class="social-links" style="
-    display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    max-width: 1300px;
-    margin-left: auto;
-    margin-right: auto;
-">
+<div class="social-links">
   <a href="https://x.com/andersenpickard" 
      target="_blank" 
      rel="noopener noreferrer"
-     style="
-        background: #000;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 14px;
-        transition: background 0.15s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-     "
-     onmouseover="this.style.background='#222'"
-     onmouseout="this.style.background='#000'">
+     class="social-link twitter">
     Twitter (X)
   </a>
   
   <a href="https://linkedin.com/in/andersenpickard" 
      target="_blank" 
      rel="noopener noreferrer"
-     style="
-        background: #0077b5;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 14px;
-        transition: background 0.15s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-     "
-     onmouseover="this.style.background='#0066a1'"
-     onmouseout="this.style.background='#0077b5'">
+     class="social-link linkedin">
     LinkedIn
   </a>
   
   <a href="https://andersenpickard.wixsite.com/home" 
      target="_blank" 
      rel="noopener noreferrer"
-     style="
-        background: #2563eb;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 14px;
-        transition: background 0.15s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-     "
-     onmouseover="this.style.background='#1d4ed8'"
-     onmouseout="this.style.background='#2563eb'">
+     class="social-link portfolio">
     Portfolio
   </a>
 </div>
@@ -368,23 +514,31 @@
     placeholder="Search players by name..." 
     autocomplete="off"
   />
+  <div class="mobile-hint">Swipe horizontally to see all columns</div>
 </div>
 
 <div id="error-container"></div>
 
 <div class="board" id="board">
-  <div class="header">
-    <div data-sort="rank"># <span class="sort-indicator"></span></div>
-    <div data-sort="name">Name <span class="sort-indicator"></span></div>
-    <div data-sort="position">Pos <span class="sort-indicator"></span></div>
-    <div data-sort="school">School <span class="sort-indicator"></span></div>
-    <div data-sort="fv">FV <span class="sort-indicator"></span></div>
-    <div data-sort="age">Age <span class="sort-indicator"></span></div>
-    <div>Height</div>
-    <div>Weight</div>
-    <div>Bats</div>
-    <div>Throws</div>
-  </div>
+  <table class="board-table">
+    <thead>
+      <tr>
+        <th class="sortable" data-sort="rank"># <span class="sort-indicator"></span></th>
+        <th class="sortable" data-sort="name">Name <span class="sort-indicator"></span></th>
+        <th class="sortable" data-sort="position">Pos <span class="sort-indicator"></span></th>
+        <th class="sortable" data-sort="school">School <span class="sort-indicator"></span></th>
+        <th class="sortable" data-sort="fv">FV <span class="sort-indicator"></span></th>
+        <th class="sortable" data-sort="age">Age <span class="sort-indicator"></span></th>
+        <th>Height</th>
+        <th>Weight</th>
+        <th>Bats</th>
+        <th>Throws</th>
+      </tr>
+    </thead>
+    <tbody id="board-body">
+      <!-- Players will be inserted here -->
+    </tbody>
+  </table>
   <div class="loading">
     <div class="spinner"></div>
     Loading the latest reports and data...
@@ -429,10 +583,9 @@
     searchTimeout = setTimeout(() => {
       const searchTerm = this.value.toLowerCase().trim();
       filterAndDisplayPlayers(searchTerm);
-    }, 300); // 300ms debounce delay
+    }, 300);
   });
 
-  // Also trigger search on Enter key
   searchBox.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       clearTimeout(searchTimeout);
@@ -442,33 +595,34 @@
   });
 
   function filterAndDisplayPlayers(searchTerm) {
+    const boardBody = document.getElementById("board-body");
+    const board = document.getElementById("board");
+    const loading = board.querySelector(".loading");
+    
+    if (loading) loading.remove();
+    
     if (!searchTerm) {
-      // If search is empty, show all players
-      clearBoard();
       renderPlayers(allPlayers);
       return;
     }
 
     const filteredPlayers = allPlayers.filter(player => {
       const playerName = (player.name || '').toLowerCase();
-      return playerName.includes(searchTerm);
+      const playerSchool = (player.school || '').toLowerCase();
+      const playerPosition = (player.position || '').toLowerCase();
+      
+      return playerName.includes(searchTerm) || 
+             playerSchool.includes(searchTerm) || 
+             playerPosition.includes(searchTerm);
     });
 
-    clearBoard();
+    boardBody.innerHTML = '';
     
     if (filteredPlayers.length === 0) {
-      showNoResultsMessage(searchTerm);
+      board.innerHTML = '<div class="no-results">No players found matching "' + searchTerm + '"</div>';
     } else {
       renderPlayers(filteredPlayers);
     }
-  }
-
-  function showNoResultsMessage(searchTerm) {
-    const board = document.getElementById("board");
-    const noResults = document.createElement("div");
-    noResults.className = "no-results";
-    noResults.textContent = `No players found matching "${searchTerm}"`;
-    board.appendChild(noResults);
   }
 
   function sortPlayers(players, column) {
@@ -480,7 +634,6 @@
       let aVal = a[column];
       let bVal = b[column];
 
-      // Handle numeric values for rank, fv, and age
       if (column === 'rank' || column === 'fv' || column === 'age') {
         aVal = parseInt(aVal) || 999999;
         bVal = parseInt(bVal) || 999999;
@@ -491,7 +644,6 @@
           return bVal - aVal;
         }
       } else {
-        // String sorting for name, position, and school
         aVal = (aVal || '').toString().toLowerCase().trim();
         bVal = (bVal || '').toString().toLowerCase().trim();
         
@@ -503,12 +655,12 @@
       }
     });
 
-    console.log("Sorted by", column, "ascending:", newAscending);
+    updateSortIndicators();
     return sorted;
   }
 
   function updateSortIndicators() {
-    document.querySelectorAll('.header > div').forEach(header => {
+    document.querySelectorAll('.board-table th.sortable').forEach(header => {
       const indicator = header.querySelector('.sort-indicator');
       if (!indicator) return;
 
@@ -570,7 +722,6 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
-  // Close modals when clicking outside
   window.onclick = function(event) {
     const reportModal = document.getElementById("reportModal");
     const pdfModal = document.getElementById("pdfModal");
@@ -583,7 +734,6 @@
     }
   }
 
-  // Close modals with Escape key
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
       closeReportModal();
@@ -598,65 +748,69 @@
 
     renderPlayers(players);
 
-    // Add header click listeners AFTER rendering
-    setTimeout(() => {
-      const headerDivs = document.querySelectorAll('.header > div[data-sort]');
-      headerDivs.forEach(header => {
-        header.addEventListener('click', () => {
-          const column = header.getAttribute('data-sort');
-          const sortedPlayers = sortPlayers(allPlayers, column);
-          allPlayers = sortedPlayers; // Update the master list
-          clearBoard();
-          const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
-          if (currentSearch) {
-            const filtered = sortedPlayers.filter(p => 
-              (p.name || '').toLowerCase().includes(currentSearch)
-            );
-            renderPlayers(filtered);
-          } else {
-            renderPlayers(sortedPlayers);
-          }
-          updateSortIndicators();
-        });
+    // Add header click listeners
+    document.querySelectorAll('.board-table th.sortable').forEach(header => {
+      header.addEventListener('click', () => {
+        const column = header.getAttribute('data-sort');
+        const sortedPlayers = sortPlayers(allPlayers, column);
+        allPlayers = sortedPlayers;
+        const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
+        
+        const boardBody = document.getElementById("board-body");
+        boardBody.innerHTML = '';
+        
+        if (currentSearch) {
+          const filtered = sortedPlayers.filter(p => 
+            (p.name || '').toLowerCase().includes(currentSearch) ||
+            (p.school || '').toLowerCase().includes(currentSearch) ||
+            (p.position || '').toLowerCase().includes(currentSearch)
+          );
+          renderPlayers(filtered);
+        } else {
+          renderPlayers(sortedPlayers);
+        }
       });
-      updateSortIndicators();
-    }, 0);
-  }
-
-  function clearBoard() {
-    const board = document.getElementById("board");
-    const rows = board.querySelectorAll('.row, .details, .no-results');
-    rows.forEach(row => row.remove());
+    });
+    
+    updateSortIndicators();
   }
 
   function renderPlayers(players) {
-    const board = document.getElementById("board");
+    const boardBody = document.getElementById("board-body");
+    if (!boardBody) return;
+    
+    boardBody.innerHTML = '';
 
     players.forEach(player => {
-      const row = document.createElement("div");
-      row.className = "row";
-
+      const row = document.createElement("tr");
+      row.dataset.playerId = player.id || player.name;
+      
       row.innerHTML = `
-        <div class="cell">${player.rank || ""}</div>
-        <div class="cell name">${player.name || ""}</div>
-        <div class="cell">${player.position || ""}</div>
-        <div class="cell">${player.school || ""}</div>
-        <div class="cell fv">${player.fv || ""}</div>
-        <div class="cell">${player.age || ""}</div>
-        <div class="cell">${player.height || ""}</div>
-        <div class="cell">${player.weight || ""}</div>
-        <div class="cell">${player.bat_hand || ""}</div>
-        <div class="cell">${player.throw_hand || ""}</div>
+        <td>${player.rank || ""}</td>
+        <td class="player-name">${player.name || ""}</td>
+        <td class="position">${player.position || ""}</td>
+        <td class="school">${player.school || ""}</td>
+        <td class="fv">${player.fv || ""}</td>
+        <td>${player.age || ""}</td>
+        <td>${player.height || ""}</td>
+        <td>${player.weight || ""}</td>
+        <td>${player.bat_hand || ""}</td>
+        <td>${player.throw_hand || ""}</td>
       `;
 
+      const detailsRow = document.createElement("tr");
+      detailsRow.className = "details-row";
+      const detailsCell = document.createElement("td");
+      detailsCell.colSpan = 10;
+      detailsCell.className = "details-cell";
+      
       const details = document.createElement("div");
       details.className = "details";
-
-      // Create action buttons HTML
+      
       const actionButtons = [];
       
       if (player.full_report) {
-        actionButtons.push(`<button class="action-btn" data-action="full-report">Click for full report</button>`);
+        actionButtons.push(`<button class="action-btn" data-action="full-report">Full Report</button>`);
       }
       
       if (player.analytics_link) {
@@ -668,7 +822,7 @@
       }
       
       if (player.report_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Full Report Link</button>`);
+        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Report Link</button>`);
       }
       
       if (player.stats_link) {
@@ -689,20 +843,43 @@
         </div>
       `;
 
+      detailsCell.appendChild(details);
+      detailsRow.appendChild(detailsCell);
+      
+      let isDetailsOpen = false;
+      
       row.addEventListener("click", () => {
-        details.classList.toggle("open");
+        if (isDetailsOpen) {
+          details.classList.remove("open");
+          detailsRow.style.display = 'none';
+        } else {
+          details.classList.add("open");
+          detailsRow.style.display = 'table-row';
+          
+          // Close any other open details
+          document.querySelectorAll('.details.open').forEach(openDetails => {
+            if (openDetails !== details) {
+              openDetails.classList.remove("open");
+              openDetails.closest('.details-row').style.display = 'none';
+            }
+          });
+        }
+        isDetailsOpen = !isDetailsOpen;
       });
 
-      board.appendChild(row);
-      board.appendChild(details);
+      boardBody.appendChild(row);
+      boardBody.appendChild(detailsRow);
+      
+      // Set initial state
+      detailsRow.style.display = 'none';
 
-      // Add event listeners to buttons AFTER they're in the DOM
+      // Add event listeners to buttons
       setTimeout(() => {
         const buttons = details.querySelectorAll('.action-btn');
         
         buttons.forEach(button => {
           button.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent row toggle
+            e.stopPropagation();
             
             const action = button.getAttribute('data-action');
             
@@ -721,7 +898,6 @@
                 
               case 'video':
                 if (player.video_link) {
-                  // Convert embed URL to watch URL if needed
                   const videoUrl = player.video_link.includes('youtube.com/embed/') 
                     ? player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')
                     : player.video_link;
@@ -750,5 +926,3 @@
 
 </body>
 </html>
-
-
