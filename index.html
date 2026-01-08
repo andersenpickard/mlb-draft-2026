@@ -109,6 +109,9 @@
       font-weight: 500;
       font-size: 14px;
       margin-top: 8px;
+      margin-right: 8px;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .report-btn:hover {
@@ -311,14 +314,11 @@
           <strong>Bio:</strong>
           ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
         </div>
-        ${player.video_link ? `
-          <div style="margin-top: 16px;">
-            <iframe width="100%" height="315" src="${player.video_link.replace('youtube.com/watch?v=', 'youtube.com/embed/').split('&')[0]}" frameborder="0" allowfullscreen></iframe>
-          </div>
-        ` : ""}
+
         <div class="links">
           ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
           ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank" rel="noopener noreferrer">Analytics</a>` : ""}
+          ${player.video_link ? `<a href="${player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
           ${player.stats_link ? `<a href="${player.stats_link}" target="_blank" rel="noopener noreferrer">Stats</a>` : ""}
         </div>
       `;
