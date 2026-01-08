@@ -539,9 +539,14 @@
   }
 
   function openReportModal(playerName, reportText) {
-    document.getElementById("modalPlayerName").textContent = playerName;
-    document.getElementById("modalReportText").textContent = reportText;
-    document.getElementById("reportModal").classList.add("open");
+  document.getElementById("modalPlayerName").textContent = playerName;
+  
+  // Preserve line breaks from the Google Sheet
+  const formattedText = (reportText || "").replace(/\n/g, '<br>');
+  
+  // Use innerHTML instead of textContent to render HTML
+  document.getElementById("modalReportText").innerHTML = formattedText;
+  document.getElementById("reportModal").classList.add("open");
   }
 
   function closeReportModal() {
@@ -742,3 +747,4 @@
 
 </body>
 </html>
+
