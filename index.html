@@ -8,20 +8,17 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
-      padding: 20px 16px;
+      padding: 24px;
       background: #f5f7fa;
       color: #1f2933;
-      font-size: 14px;
     }
 
     h1 {
       margin-bottom: 16px;
-      font-size: clamp(22px, 4vw, 28px);
-      text-align: center;
     }
 
     .search-container {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       max-width: 1300px;
       margin-left: auto;
       margin-right: auto;
@@ -30,22 +27,20 @@
     .search-box {
       width: 100%;
       padding: 12px 16px;
-      font-size: 15px;
+      font-size: 16px;
       border: 2px solid #e5e7eb;
       border-radius: 8px;
       background: white;
       color: #1f2933;
       transition: border-color 0.15s ease;
-      box-sizing: border-box;
     }
 
     #modalReportText {
       white-space: pre-line;
-      line-height: 1.5;
+      line-height: 1.6;
       max-height: 400px;
       overflow-y: auto;
       padding-right: 8px;
-      font-size: 13px;
     }
 
     .search-box:focus {
@@ -65,158 +60,70 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
     }
 
-    .board-table {
-      width: 100%;
-      min-width: 900px;
-      border-collapse: collapse;
+    .header, .row {
+      display: grid;
+      grid-template-columns: 50px 1.5fr 80px 1.3fr 50px 50px 70px 70px 70px 70px;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
     }
 
-    .board-table th,
-    .board-table td {
-      padding: 10px 8px;
-      text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-      vertical-align: middle;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .board-table th {
+    .header {
       background: #111827;
       color: white;
       font-weight: 600;
-      font-size: 12px;
+      font-size: 13px;
       text-transform: uppercase;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding: 12px 8px;
     }
 
-    .board-table th.sortable {
+    .header > div {
       cursor: pointer;
       user-select: none;
-      transition: background-color 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .board-table th.sortable:hover {
-      background: #1f2937;
+    .header > div:hover {
+      opacity: 0.8;
     }
 
     .sort-indicator {
-      font-size: 9px;
-      margin-left: 3px;
+      font-size: 12px;
       opacity: 0.6;
     }
 
-    .board-table tr {
+    .row {
+      border-bottom: 1px solid #e5e7eb;
       cursor: pointer;
       transition: background 0.15s ease;
     }
 
-    .board-table tr:hover {
+    .row:hover {
       background: #f0f4f8;
     }
 
-    .player-name {
+    .cell {
+      font-size: 14px;
+    }
+
+    .name {
       font-weight: 600;
-      min-width: 130px;
     }
 
     .fv {
       font-weight: 700;
-      color: #2563eb;
-      min-width: 40px;
-    }
-
-    .position {
-      min-width: 40px;
-    }
-
-    .school {
-      min-width: 100px;
-    }
-
-    .age-col {
-      min-width: 40px;
-    }
-
-    .height-col {
-      min-width: 60px;
-    }
-
-    .weight-col {
-      min-width: 60px;
-    }
-
-    .bat-col {
-      min-width: 40px;
-    }
-
-    .throw-col {
-      min-width: 40px;
-    }
-
-    .rank-col {
-      min-width: 35px;
-      text-align: center;
-    }
-
-    /* Mobile-optimized columns */
-    @media (max-width: 768px) {
-      .board {
-        border-radius: 6px;
-        min-width: 600px;
-      }
-      
-      .board-table th,
-      .board-table td {
-        padding: 10px 6px;
-        font-size: 12px;
-      }
-      
-      .player-name {
-        min-width: 110px;
-      }
-      
-      .school {
-        min-width: 90px;
-      }
-    }
-
-    /* Very small screens */
-    @media (max-width: 480px) {
-      body {
-        padding: 12px 10px;
-      }
-      
-      .board-table th,
-      .board-table td {
-        padding: 8px 5px;
-        font-size: 11px;
-      }
-      
-      .player-name {
-        min-width: 100px;
-      }
-      
-      .school {
-        min-width: 80px;
-      }
     }
 
     .details {
+      grid-column: 1 / -1;
       background: #f9fafb;
-      padding: 16px;
+      padding: 16px 24px 20px;
       display: none;
-      font-size: 13px;
+      font-size: 14px;
       border-bottom: 1px solid #e5e7eb;
-      width: 100%;
-      box-sizing: border-box;
     }
 
     .details.open {
@@ -225,54 +132,39 @@
 
     .details h4 {
       margin-top: 0;
-      margin-bottom: 10px;
-      color: #111827;
-      font-size: 15px;
-    }
-
-    .scouting-summary {
-      margin-bottom: 16px;
-      color: #374151;
-      line-height: 1.5;
-      font-size: 12.5px; /* Smaller font for scouting summary */
+      margin-bottom: 8px;
     }
 
     .bio {
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       color: #374151;
-      padding: 10px;
-      background: white;
-      border-radius: 6px;
-      border-left: 4px solid #2563eb;
-      font-size: 12.5px; /* Smaller font for bio */
     }
 
     .action-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 16px;
+      margin-top: 8px;
     }
 
     .action-btn {
       background: #2563eb;
       color: white;
-      padding: 8px 14px;
+      padding: 8px 16px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
-      font-size: 12px;
+      font-size: 14px;
       text-decoration: none;
       display: inline-block;
       text-align: center;
-      transition: all 0.15s ease;
-      flex: 1;
-      min-width: 120px;
+      transition: background 0.15s ease;
     }
 
     .action-btn:hover {
       background: #1d4ed8;
+      text-decoration: none;
     }
 
     .action-btn.secondary {
@@ -281,24 +173,6 @@
 
     .action-btn.secondary:hover {
       background: #4b5563;
-    }
-
-    /* Mobile button adjustments */
-    @media (max-width: 768px) {
-      .action-buttons {
-        flex-direction: column;
-      }
-      
-      .action-btn {
-        min-width: 100%;
-        margin-bottom: 6px;
-        padding: 10px 14px;
-        font-size: 13px;
-      }
-      
-      .details {
-        padding: 14px;
-      }
     }
 
     .modal {
@@ -312,8 +186,6 @@
       background-color: rgba(0, 0, 0, 0.5);
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
     }
 
     .modal.open {
@@ -322,19 +194,13 @@
 
     .modal-content {
       background-color: white;
-      padding: 20px;
+      padding: 32px;
       border-radius: 8px;
       max-width: 600px;
-      width: 100%;
+      width: 90%;
       max-height: 80vh;
       overflow-y: auto;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
-
-    @media (max-width: 768px) {
-      .modal-content {
-        padding: 16px;
-      }
     }
 
     .modal-header {
@@ -346,21 +212,15 @@
 
     .modal-header h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 24px;
     }
 
     .close-btn {
       background: none;
       border: none;
-      font-size: 24px;
+      font-size: 28px;
       cursor: pointer;
       color: #666;
-      padding: 0;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .close-btn:hover {
@@ -372,7 +232,7 @@
       background-color: white;
       border-radius: 8px;
       max-width: 900px;
-      width: 100%;
+      width: 90%;
       max-height: 90vh;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
@@ -382,18 +242,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
+      padding: 16px 32px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .error {
       color: #dc2626;
-      padding: 14px;
+      padding: 16px;
       background: #fee2e2;
       border-radius: 8px;
       margin-bottom: 16px;
-      text-align: center;
-      font-size: 13px;
     }
 
     .loading {
@@ -406,109 +264,23 @@
       border: 3px solid #f3f3f3;
       border-top: 3px solid #2563eb;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       animation: spin 1s linear infinite;
       margin: 0 auto 16px;
     }
 
     .no-results {
       text-align: center;
-      padding: 30px;
+      padding: 40px;
       color: #6b7280;
       font-style: italic;
-      background: white;
-      border-radius: 8px;
-      margin-top: 20px;
-      font-size: 14px;
+      grid-column: 1 / -1;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
-    }
-
-    /* Social Links */
-    .social-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      max-width: 1300px;
-      margin-left: auto;
-      margin-right: auto;
-      justify-content: center;
-    }
-
-    .social-link {
-      background: #000;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 13px;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      flex: 1;
-      min-width: 100px;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .social-link.twitter {
-      background: #000;
-    }
-    
-    .social-link.twitter:hover {
-      background: #222;
-    }
-    
-    .social-link.linkedin {
-      background: #0077b5;
-    }
-    
-    .social-link.linkedin:hover {
-      background: #0066a1;
-    }
-    
-    .social-link.portfolio {
-      background: #2563eb;
-    }
-    
-    .social-link.portfolio:hover {
-      background: #1d4ed8;
-    }
-
-    @media (max-width: 768px) {
-      .social-links {
-        flex-direction: column;
-      }
-      
-      .social-link {
-        min-width: 100%;
-        padding: 12px 16px;
-      }
-    }
-
-    /* Mobile info hint */
-    .mobile-hint {
-      display: none;
-      text-align: center;
-      color: #6b7280;
-      font-size: 11px;
-      margin-top: 6px;
-      padding: 6px;
-      background: rgba(0,0,0,0.05);
-      border-radius: 4px;
-    }
-
-    @media (max-width: 768px) {
-      .mobile-hint {
-        display: block;
-      }
     }
   </style>
 </head>
@@ -516,25 +288,74 @@
 
 <h1>Andersen Pickard's 2026 MLB Draft Big Board</h1>
 
-<div class="social-links">
+  <div class="social-links" style="
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+">
   <a href="https://x.com/andersenpickard" 
      target="_blank" 
      rel="noopener noreferrer"
-     class="social-link twitter">
+     style="
+        background: #000;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: background 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+     "
+     onmouseover="this.style.background='#222'"
+     onmouseout="this.style.background='#000'">
     Twitter (X)
   </a>
   
   <a href="https://linkedin.com/in/andersenpickard" 
      target="_blank" 
      rel="noopener noreferrer"
-     class="social-link linkedin">
+     style="
+        background: #0077b5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: background 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+     "
+     onmouseover="this.style.background='#0066a1'"
+     onmouseout="this.style.background='#0077b5'">
     LinkedIn
   </a>
   
   <a href="https://andersenpickard.wixsite.com/home" 
      target="_blank" 
      rel="noopener noreferrer"
-     class="social-link portfolio">
+     style="
+        background: #2563eb;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: background 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+     "
+     onmouseover="this.style.background='#1d4ed8'"
+     onmouseout="this.style.background='#2563eb'">
     Portfolio
   </a>
 </div>
@@ -547,31 +368,23 @@
     placeholder="Search players by name..." 
     autocomplete="off"
   />
-  <div class="mobile-hint">Swipe horizontally to see all columns</div>
 </div>
 
 <div id="error-container"></div>
 
 <div class="board" id="board">
-  <table class="board-table">
-    <thead>
-      <tr>
-        <th class="sortable rank-col" data-sort="rank"># <span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="name">Name <span class="sort-indicator"></span></th>
-        <th class="sortable position" data-sort="position">Pos <span class="sort-indicator"></span></th>
-        <th class="sortable school" data-sort="school">School <span class="sort-indicator"></span></th>
-        <th class="sortable fv" data-sort="fv">FV <span class="sort-indicator"></span></th>
-        <th class="sortable age-col" data-sort="age">Age <span class="sort-indicator"></span></th>
-        <th class="height-col">Height</th>
-        <th class="weight-col">Weight</th>
-        <th class="bat-col">Bats</th>
-        <th class="throw-col">Throws</th>
-      </tr>
-    </thead>
-    <tbody id="board-body">
-      <!-- Players will be inserted here -->
-    </tbody>
-  </table>
+  <div class="header">
+    <div data-sort="rank"># <span class="sort-indicator"></span></div>
+    <div data-sort="name">Name <span class="sort-indicator"></span></div>
+    <div data-sort="position">Pos <span class="sort-indicator"></span></div>
+    <div data-sort="school">School <span class="sort-indicator"></span></div>
+    <div data-sort="fv">FV <span class="sort-indicator"></span></div>
+    <div data-sort="age">Age <span class="sort-indicator"></span></div>
+    <div>Height</div>
+    <div>Weight</div>
+    <div>Bats</div>
+    <div>Throws</div>
+  </div>
   <div class="loading">
     <div class="spinner"></div>
     Loading the latest reports and data...
@@ -616,9 +429,10 @@
     searchTimeout = setTimeout(() => {
       const searchTerm = this.value.toLowerCase().trim();
       filterAndDisplayPlayers(searchTerm);
-    }, 300);
+    }, 300); // 300ms debounce delay
   });
 
+  // Also trigger search on Enter key
   searchBox.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       clearTimeout(searchTimeout);
@@ -628,34 +442,33 @@
   });
 
   function filterAndDisplayPlayers(searchTerm) {
-    const boardBody = document.getElementById("board-body");
-    const board = document.getElementById("board");
-    const loading = board.querySelector(".loading");
-    
-    if (loading) loading.remove();
-    
     if (!searchTerm) {
+      // If search is empty, show all players
+      clearBoard();
       renderPlayers(allPlayers);
       return;
     }
 
     const filteredPlayers = allPlayers.filter(player => {
       const playerName = (player.name || '').toLowerCase();
-      const playerSchool = (player.school || '').toLowerCase();
-      const playerPosition = (player.position || '').toLowerCase();
-      
-      return playerName.includes(searchTerm) || 
-             playerSchool.includes(searchTerm) || 
-             playerPosition.includes(searchTerm);
+      return playerName.includes(searchTerm);
     });
 
-    boardBody.innerHTML = '';
+    clearBoard();
     
     if (filteredPlayers.length === 0) {
-      board.innerHTML = '<div class="no-results">No players found matching "' + searchTerm + '"</div>';
+      showNoResultsMessage(searchTerm);
     } else {
       renderPlayers(filteredPlayers);
     }
+  }
+
+  function showNoResultsMessage(searchTerm) {
+    const board = document.getElementById("board");
+    const noResults = document.createElement("div");
+    noResults.className = "no-results";
+    noResults.textContent = `No players found matching "${searchTerm}"`;
+    board.appendChild(noResults);
   }
 
   function sortPlayers(players, column) {
@@ -667,6 +480,7 @@
       let aVal = a[column];
       let bVal = b[column];
 
+      // Handle numeric values for rank, fv, and age
       if (column === 'rank' || column === 'fv' || column === 'age') {
         aVal = parseInt(aVal) || 999999;
         bVal = parseInt(bVal) || 999999;
@@ -677,6 +491,7 @@
           return bVal - aVal;
         }
       } else {
+        // String sorting for name, position, and school
         aVal = (aVal || '').toString().toLowerCase().trim();
         bVal = (bVal || '').toString().toLowerCase().trim();
         
@@ -688,12 +503,12 @@
       }
     });
 
-    updateSortIndicators();
+    console.log("Sorted by", column, "ascending:", newAscending);
     return sorted;
   }
 
   function updateSortIndicators() {
-    document.querySelectorAll('.board-table th.sortable').forEach(header => {
+    document.querySelectorAll('.header > div').forEach(header => {
       const indicator = header.querySelector('.sort-indicator');
       if (!indicator) return;
 
@@ -755,6 +570,7 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
+  // Close modals when clicking outside
   window.onclick = function(event) {
     const reportModal = document.getElementById("reportModal");
     const pdfModal = document.getElementById("pdfModal");
@@ -767,6 +583,7 @@
     }
   }
 
+  // Close modals with Escape key
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
       closeReportModal();
@@ -781,69 +598,65 @@
 
     renderPlayers(players);
 
-    // Add header click listeners
-    document.querySelectorAll('.board-table th.sortable').forEach(header => {
-      header.addEventListener('click', () => {
-        const column = header.getAttribute('data-sort');
-        const sortedPlayers = sortPlayers(allPlayers, column);
-        allPlayers = sortedPlayers;
-        const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
-        
-        const boardBody = document.getElementById("board-body");
-        boardBody.innerHTML = '';
-        
-        if (currentSearch) {
-          const filtered = sortedPlayers.filter(p => 
-            (p.name || '').toLowerCase().includes(currentSearch) ||
-            (p.school || '').toLowerCase().includes(currentSearch) ||
-            (p.position || '').toLowerCase().includes(currentSearch)
-          );
-          renderPlayers(filtered);
-        } else {
-          renderPlayers(sortedPlayers);
-        }
+    // Add header click listeners AFTER rendering
+    setTimeout(() => {
+      const headerDivs = document.querySelectorAll('.header > div[data-sort]');
+      headerDivs.forEach(header => {
+        header.addEventListener('click', () => {
+          const column = header.getAttribute('data-sort');
+          const sortedPlayers = sortPlayers(allPlayers, column);
+          allPlayers = sortedPlayers; // Update the master list
+          clearBoard();
+          const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
+          if (currentSearch) {
+            const filtered = sortedPlayers.filter(p => 
+              (p.name || '').toLowerCase().includes(currentSearch)
+            );
+            renderPlayers(filtered);
+          } else {
+            renderPlayers(sortedPlayers);
+          }
+          updateSortIndicators();
+        });
       });
-    });
-    
-    updateSortIndicators();
+      updateSortIndicators();
+    }, 0);
+  }
+
+  function clearBoard() {
+    const board = document.getElementById("board");
+    const rows = board.querySelectorAll('.row, .details, .no-results');
+    rows.forEach(row => row.remove());
   }
 
   function renderPlayers(players) {
-    const boardBody = document.getElementById("board-body");
-    if (!boardBody) return;
-    
-    boardBody.innerHTML = '';
+    const board = document.getElementById("board");
 
     players.forEach(player => {
-      const row = document.createElement("tr");
-      row.dataset.playerId = player.id || player.name;
-      
+      const row = document.createElement("div");
+      row.className = "row";
+
       row.innerHTML = `
-        <td class="rank-col">${player.rank || ""}</td>
-        <td class="player-name">${player.name || ""}</td>
-        <td class="position">${player.position || ""}</td>
-        <td class="school">${player.school || ""}</td>
-        <td class="fv">${player.fv || ""}</td>
-        <td class="age-col">${player.age || ""}</td>
-        <td class="height-col">${player.height || ""}</td>
-        <td class="weight-col">${player.weight || ""}</td>
-        <td class="bat-col">${player.bat_hand || ""}</td>
-        <td class="throw-col">${player.throw_hand || ""}</td>
+        <div class="cell">${player.rank || ""}</div>
+        <div class="cell name">${player.name || ""}</div>
+        <div class="cell">${player.position || ""}</div>
+        <div class="cell">${player.school || ""}</div>
+        <div class="cell fv">${player.fv || ""}</div>
+        <div class="cell">${player.age || ""}</div>
+        <div class="cell">${player.height || ""}</div>
+        <div class="cell">${player.weight || ""}</div>
+        <div class="cell">${player.bat_hand || ""}</div>
+        <div class="cell">${player.throw_hand || ""}</div>
       `;
 
-      const detailsRow = document.createElement("tr");
-      detailsRow.className = "details-row";
-      const detailsCell = document.createElement("td");
-      detailsCell.colSpan = 10;
-      detailsCell.className = "details-cell";
-      
       const details = document.createElement("div");
       details.className = "details";
-      
+
+      // Create action buttons HTML
       const actionButtons = [];
       
       if (player.full_report) {
-        actionButtons.push(`<button class="action-btn" data-action="full-report">Full Report</button>`);
+        actionButtons.push(`<button class="action-btn" data-action="full-report">Click for full report</button>`);
       }
       
       if (player.analytics_link) {
@@ -855,7 +668,7 @@
       }
       
       if (player.report_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Report Link</button>`);
+        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Full Report Link</button>`);
       }
       
       if (player.stats_link) {
@@ -864,9 +677,7 @@
 
       details.innerHTML = `
         <h4>Scouting Summary</h4>
-        <div class="scouting-summary">
-          ${player.report || "No report available"}
-        </div>
+        <p>${player.report || "No report available"}</p>
         
         <div class="bio">
           <strong>Bio:</strong>
@@ -878,43 +689,20 @@
         </div>
       `;
 
-      detailsCell.appendChild(details);
-      detailsRow.appendChild(detailsCell);
-      
-      let isDetailsOpen = false;
-      
       row.addEventListener("click", () => {
-        if (isDetailsOpen) {
-          details.classList.remove("open");
-          detailsRow.style.display = 'none';
-        } else {
-          details.classList.add("open");
-          detailsRow.style.display = 'table-row';
-          
-          // Close any other open details
-          document.querySelectorAll('.details.open').forEach(openDetails => {
-            if (openDetails !== details) {
-              openDetails.classList.remove("open");
-              openDetails.closest('.details-row').style.display = 'none';
-            }
-          });
-        }
-        isDetailsOpen = !isDetailsOpen;
+        details.classList.toggle("open");
       });
 
-      boardBody.appendChild(row);
-      boardBody.appendChild(detailsRow);
-      
-      // Set initial state
-      detailsRow.style.display = 'none';
+      board.appendChild(row);
+      board.appendChild(details);
 
-      // Add event listeners to buttons
+      // Add event listeners to buttons AFTER they're in the DOM
       setTimeout(() => {
         const buttons = details.querySelectorAll('.action-btn');
         
         buttons.forEach(button => {
           button.addEventListener('click', (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Prevent row toggle
             
             const action = button.getAttribute('data-action');
             
@@ -933,6 +721,7 @@
                 
               case 'video':
                 if (player.video_link) {
+                  // Convert embed URL to watch URL if needed
                   const videoUrl = player.video_link.includes('youtube.com/embed/') 
                     ? player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')
                     : player.video_link;
