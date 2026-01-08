@@ -724,7 +724,10 @@
         let toolsHTML = '';
 
         if (hasHittingTools || hasPitchingTools) {
-            toolsHTML = 
+            toolsHTML = `
+        <div class="tools">
+          <strong>Tools:</strong><br>
+      `;
 
             // Add hitting tools if they exist
             if (hasHittingTools) {
