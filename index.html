@@ -78,6 +78,23 @@
       text-transform: uppercase;
     }
 
+    .tools {
+      margin-bottom: 12px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .tools strong {
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 4px;
+    }
+
+    .tool-group {
+      display: inline-block;
+      margin-top: 4px;
+    }
+    
     .header > div {
       cursor: pointer;
       user-select: none;
@@ -638,10 +655,10 @@
     const board = document.getElementById("board");
 
     players.forEach(player => {
-      const row = document.createElement("div");
-      row.className = "row";
+        const row = document.createElement("div");
+        row.className = "row";
 
-      row.innerHTML = `
+        row.innerHTML = `
         <div class="cell">${player.rank || ""}</div>
         <div class="cell name">${player.name || ""}</div>
         <div class="cell">${player.position || ""}</div>
@@ -654,33 +671,95 @@
         <div class="cell">${player.throw_hand || ""}</div>
       `;
 
-      const details = document.createElement("div");
-      details.className = "details";
+        const details = document.createElement("div");
+        details.className = "details";
 
-      // Create action buttons HTML
-      const actionButtons = [];
-      
-      if (player.full_report) {
-        actionButtons.push(`<button class="action-btn" data-action="full-report">Click for full report</button>`);
-      }
-      
-      if (player.analytics_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="analytics">Analytics</button>`);
-      }
-      
-      if (player.video_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="video">Video</button>`);
-      }
-      
-      if (player.report_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Full Report Link</button>`);
-      }
-      
-      if (player.stats_link) {
-        actionButtons.push(`<button class="action-btn secondary" data-action="stats">Stats</button>`);
-      }
+        // Create action buttons HTML
+        const actionButtons = [];
 
-      details.innerHTML = `
+        if (player.full_report) {
+            actionButtons.push(`<button class="action-btn" data-action="full-report">Click for full report</button>`);
+        }
+
+        if (player.analytics_link) {
+            actionButtons.push(`<button class="action-btn secondary" data-action="analytics">Analytics</button>`);
+        }
+
+        if (player.video_link) {
+            actionButtons.push(`<button class="action-btn secondary" data-action="video">Video</button>`);
+        }
+
+        if (player.report_link) {
+            actionButtons.push(`<button class="action-btn secondary" data-action="full-report-link">Full Report Link</button>`);
+        }
+
+        if (player.stats_link) {
+            actionButtons.push(`<button class="action-btn secondary" data-action="stats">Stats</button>`);
+        }
+
+        // Create tools display
+        const tools = [];
+        const toolLabels = {
+            hit: 'Hit',
+            pow: 'Power',
+            fld: 'Field',
+            arm: 'Arm',
+            run: 'Run',
+            fb: 'Fastball',
+            sl: 'Slider',
+            cb: 'Curveball',
+            ch: 'Changeup',
+            ctrl: 'Control'
+        };
+
+        // Group tools by type (hitting vs pitching)
+        const hittingTools = ['hit', 'pow', 'fld', 'arm', 'run'];
+        const pitchingTools = ['fb', 'sl', 'cb', 'ch', 'ctrl'];
+
+        // Check if player has any hitting tools
+        const hasHittingTools = hittingTools.some(tool => player[tool] && player[tool].toString().trim() !== '');
+        // Check if player has any pitching tools  
+        const hasPitchingTools = pitchingTools.some(tool => player[tool] && player[tool].toString().trim() !== '');
+
+        let toolsHTML = '';
+
+        if (hasHittingTools || hasPitchingTools) {
+            toolsHTML = `
+        <div class="tools">
+          <strong>Tools:</strong><br>
+      `;
+
+            // Add hitting tools if they exist
+            if (hasHittingTools) {
+                const hittingToolItems = [];
+                hittingTools.forEach(tool => {
+                    if (player[tool] && player[tool].toString().trim() !== '') {
+                        hittingToolItems.push(`${toolLabels[tool]}: ${player[tool]}`);
+                    }
+                });
+                if (hittingToolItems.length > 0) {
+                    toolsHTML += `<span class="tool-group">${hittingToolItems.join(' &nbsp;&nbsp; ')}</span>`;
+                }
+            }
+
+            // Add pitching tools if they exist
+            if (hasPitchingTools) {
+                const pitchingToolItems = [];
+                pitchingTools.forEach(tool => {
+                    if (player[tool] && player[tool].toString().trim() !== '') {
+                        pitchingToolItems.push(`${toolLabels[tool]}: ${player[tool]}`);
+                    }
+                });
+                if (pitchingToolItems.length > 0) {
+                    if (hasHittingTools) toolsHTML += '<br>';
+                    toolsHTML += `<span class="tool-group">${pitchingToolItems.join(' &nbsp;&nbsp; ')}</span>`;
+                }
+            }
+
+            toolsHTML += `</div>`;
+        }
+
+        details.innerHTML = `
         <h4>Scouting Summary</h4>
         <p>${player.report || "No report available"}</p>
         
@@ -688,69 +767,71 @@
           <strong>Bio:</strong>
           ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
         </div>
+        
+        ${toolsHTML}
 
         <div class="action-buttons">
           ${actionButtons.join('')}
         </div>
       `;
 
-      row.addEventListener("click", () => {
-        details.classList.toggle("open");
-      });
-
-      board.appendChild(row);
-      board.appendChild(details);
-
-      // Add event listeners to buttons AFTER they're in the DOM
-      setTimeout(() => {
-        const buttons = details.querySelectorAll('.action-btn');
-        
-        buttons.forEach(button => {
-          button.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent row toggle
-            
-            const action = button.getAttribute('data-action');
-            
-            switch(action) {
-              case 'full-report':
-                if (player.full_report) {
-                  openReportModal(player.name, player.full_report);
-                }
-                break;
-                
-              case 'analytics':
-                if (player.analytics_link) {
-                  openPdfModal(player.analytics_link);
-                }
-                break;
-                
-              case 'video':
-                if (player.video_link) {
-                  // Convert embed URL to watch URL if needed
-                  const videoUrl = player.video_link.includes('youtube.com/embed/') 
-                    ? player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=')
-                    : player.video_link;
-                  openLinkInNewTab(videoUrl);
-                }
-                break;
-                
-              case 'full-report-link':
-                if (player.report_link) {
-                  openLinkInNewTab(player.report_link);
-                }
-                break;
-                
-              case 'stats':
-                if (player.stats_link) {
-                  openLinkInNewTab(player.stats_link);
-                }
-                break;
-            }
-          });
+        row.addEventListener("click", () => {
+            details.classList.toggle("open");
         });
-      }, 0);
+
+        board.appendChild(row);
+        board.appendChild(details);
+
+        // Add event listeners to buttons AFTER they're in the DOM
+        setTimeout(() => {
+            const buttons = details.querySelectorAll('.action-btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent row toggle
+
+                    const action = button.getAttribute('data-action');
+
+                    switch (action) {
+                        case 'full-report':
+                            if (player.full_report) {
+                                openReportModal(player.name, player.full_report);
+                            }
+                            break;
+
+                        case 'analytics':
+                            if (player.analytics_link) {
+                                openPdfModal(player.analytics_link);
+                            }
+                            break;
+
+                        case 'video':
+                            if (player.video_link) {
+                                // Convert embed URL to watch URL if needed
+                                const videoUrl = player.video_link.includes('youtube.com/embed/') ?
+                                    player.video_link.replace('youtube.com/embed/', 'youtube.com/watch?v=') :
+                                    player.video_link;
+                                openLinkInNewTab(videoUrl);
+                            }
+                            break;
+
+                        case 'full-report-link':
+                            if (player.report_link) {
+                                openLinkInNewTab(player.report_link);
+                            }
+                            break;
+
+                        case 'stats':
+                            if (player.stats_link) {
+                                openLinkInNewTab(player.stats_link);
+                            }
+                            break;
+                    }
+                });
+            });
+        }, 0);
     });
-  }
+}
 </script>
 
 </body>
