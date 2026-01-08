@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MLB Draft Big Board</title>
+  <title>Andersen Pickard's 2026 MLB Draft Big Board</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -15,6 +15,34 @@
 
     h1 {
       margin-bottom: 16px;
+    }
+
+    .search-container {
+      margin-bottom: 24px;
+      max-width: 1300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      color: #1f2933;
+      transition: border-color 0.15s ease;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-box::placeholder {
+      color: #9ca3af;
     }
 
     .board {
@@ -40,6 +68,23 @@
       font-weight: 600;
       font-size: 13px;
       text-transform: uppercase;
+    }
+
+    .header > div {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header > div:hover {
+      opacity: 0.8;
+    }
+
+    .sort-indicator {
+      font-size: 12px;
+      opacity: 0.6;
     }
 
     .row {
@@ -85,10 +130,6 @@
     .bio {
       margin-bottom: 12px;
       color: #374151;
-    }
-
-    .links {
-      margin-top: 16px;
     }
 
     .action-buttons {
@@ -178,6 +219,25 @@
       color: #000;
     }
 
+    /* PDF Modal Specific Styles */
+    .pdf-modal-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 900px;
+      width: 90%;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .pdf-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
     .error {
       color: #dc2626;
       padding: 16px;
@@ -202,6 +262,14 @@
       margin: 0 auto 16px;
     }
 
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+      font-style: italic;
+      grid-column: 1 / -1;
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -210,17 +278,28 @@
 </head>
 <body>
 
-<h1>MLB Draft Big Board</h1>
+<h1>Andersen Pickard's 2026 MLB Draft Big Board</h1>
+
+<div class="search-container">
+  <input 
+    type="text" 
+    id="searchBox" 
+    class="search-box" 
+    placeholder="Search players by name..." 
+    autocomplete="off"
+  />
+</div>
+
 <div id="error-container"></div>
 
 <div class="board" id="board">
   <div class="header">
-    <div>#</div>
-    <div>Name</div>
-    <div>Pos</div>
-    <div>School</div>
-    <div>FV</div>
-    <div>Age</div>
+    <div data-sort="rank"># <span class="sort-indicator"></span></div>
+    <div data-sort="name">Name <span class="sort-indicator"></span></div>
+    <div data-sort="position">Pos <span class="sort-indicator"></span></div>
+    <div data-sort="school">School <span class="sort-indicator"></span></div>
+    <div data-sort="fv">FV <span class="sort-indicator"></span></div>
+    <div data-sort="age">Age <span class="sort-indicator"></span></div>
     <div>Height</div>
     <div>Weight</div>
     <div>Bats</div>
@@ -243,8 +322,8 @@
 </div>
 
 <div id="pdfModal" class="modal">
-  <div class="modal-content" style="max-width: 900px; padding: 0;">
-    <div class="modal-header" style="padding: 16px 32px;">
+  <div class="pdf-modal-content">
+    <div class="pdf-modal-header">
       <h2 style="margin: 0;">Analytics Report</h2>
       <button class="close-btn" onclick="closePdfModal()">&times;</button>
     </div>
@@ -255,6 +334,115 @@
 <script>
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPoECCo_lX-hwSa9bI8z2KcHVeeFa76m3dQeR9DVjdoxh1qkME0QIvJnNKSL9WwZZ-bQ/exec";
 
+  let allPlayers = [];
+  let sortState = {
+    column: null,
+    ascending: true
+  };
+
+  // Search functionality
+  let searchTimeout;
+  const searchBox = document.getElementById('searchBox');
+  
+  searchBox.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const searchTerm = this.value.toLowerCase().trim();
+      filterAndDisplayPlayers(searchTerm);
+    }, 300); // 300ms debounce delay
+  });
+
+  // Also trigger search on Enter key
+  searchBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      clearTimeout(searchTimeout);
+      const searchTerm = this.value.toLowerCase().trim();
+      filterAndDisplayPlayers(searchTerm);
+    }
+  });
+
+  function filterAndDisplayPlayers(searchTerm) {
+    if (!searchTerm) {
+      // If search is empty, show all players
+      clearBoard();
+      renderPlayers(allPlayers);
+      return;
+    }
+
+    const filteredPlayers = allPlayers.filter(player => {
+      const playerName = (player.name || '').toLowerCase();
+      return playerName.includes(searchTerm);
+    });
+
+    clearBoard();
+    
+    if (filteredPlayers.length === 0) {
+      showNoResultsMessage(searchTerm);
+    } else {
+      renderPlayers(filteredPlayers);
+    }
+  }
+
+  function showNoResultsMessage(searchTerm) {
+    const board = document.getElementById("board");
+    const noResults = document.createElement("div");
+    noResults.className = "no-results";
+    noResults.textContent = `No players found matching "${searchTerm}"`;
+    board.appendChild(noResults);
+  }
+
+  function sortPlayers(players, column) {
+    const newAscending = sortState.column === column ? !sortState.ascending : true;
+    sortState.column = column;
+    sortState.ascending = newAscending;
+
+    const sorted = [...players].sort((a, b) => {
+      let aVal = a[column];
+      let bVal = b[column];
+
+      // Handle numeric values for rank, fv, and age
+      if (column === 'rank' || column === 'fv' || column === 'age') {
+        aVal = parseInt(aVal) || 999999;
+        bVal = parseInt(bVal) || 999999;
+        
+        if (newAscending) {
+          return aVal - bVal;
+        } else {
+          return bVal - aVal;
+        }
+      } else {
+        // String sorting for name, position, and school
+        aVal = (aVal || '').toString().toLowerCase().trim();
+        bVal = (bVal || '').toString().toLowerCase().trim();
+        
+        if (newAscending) {
+          return aVal.localeCompare(bVal);
+        } else {
+          return bVal.localeCompare(aVal);
+        }
+      }
+    });
+
+    console.log("Sorted by", column, "ascending:", newAscending);
+    return sorted;
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('.header > div').forEach(header => {
+      const indicator = header.querySelector('.sort-indicator');
+      if (!indicator) return;
+
+      const column = header.getAttribute('data-sort');
+      if (column === sortState.column) {
+        indicator.textContent = sortState.ascending ? '▲' : '▼';
+        indicator.style.opacity = '1';
+      } else {
+        indicator.textContent = '';
+        indicator.style.opacity = '0.3';
+      }
+    });
+  }
+
   fetch(APPS_SCRIPT_URL)
     .then(res => res.json())
     .then(players => {
@@ -263,6 +451,7 @@
         showError("No player data found. Check your spreadsheet has data.");
         return;
       }
+      allPlayers = players;
       renderBoard(players);
     })
     .catch(err => {
@@ -301,22 +490,67 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
+  // Close modals when clicking outside
   window.onclick = function(event) {
     const reportModal = document.getElementById("reportModal");
     const pdfModal = document.getElementById("pdfModal");
     
     if (event.target === reportModal) {
-      reportModal.classList.remove("open");
+      closeReportModal();
     }
     if (event.target === pdfModal) {
-      pdfModal.classList.remove("open");
+      closePdfModal();
     }
   }
+
+  // Close modals with Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeReportModal();
+      closePdfModal();
+    }
+  });
 
   function renderBoard(players) {
     const board = document.getElementById("board");
     const loading = board.querySelector(".loading");
     if (loading) loading.remove();
+
+    renderPlayers(players);
+
+    // Add header click listeners AFTER rendering
+    setTimeout(() => {
+      const headerDivs = document.querySelectorAll('.header > div[data-sort]');
+      headerDivs.forEach(header => {
+        header.addEventListener('click', () => {
+          const column = header.getAttribute('data-sort');
+          const sortedPlayers = sortPlayers(allPlayers, column);
+          allPlayers = sortedPlayers; // Update the master list
+          clearBoard();
+          const currentSearch = document.getElementById('searchBox').value.toLowerCase().trim();
+          if (currentSearch) {
+            const filtered = sortedPlayers.filter(p => 
+              (p.name || '').toLowerCase().includes(currentSearch)
+            );
+            renderPlayers(filtered);
+          } else {
+            renderPlayers(sortedPlayers);
+          }
+          updateSortIndicators();
+        });
+      });
+      updateSortIndicators();
+    }, 0);
+  }
+
+  function clearBoard() {
+    const board = document.getElementById("board");
+    const rows = board.querySelectorAll('.row, .details, .no-results');
+    rows.forEach(row => row.remove());
+  }
+
+  function renderPlayers(players) {
+    const board = document.getElementById("board");
 
     players.forEach(player => {
       const row = document.createElement("div");
@@ -362,7 +596,7 @@
       }
 
       details.innerHTML = `
-        <h4>Scouting Report</h4>
+        <h4>Scouting Summary</h4>
         <p>${player.report || "No report available"}</p>
         
         <div class="bio">
