@@ -98,11 +98,20 @@
     .links a:hover {
       text-decoration: underline;
     }
+
+    .error {
+      color: #dc2626;
+      padding: 16px;
+      background: #fee2e2;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
   </style>
 </head>
 <body>
 
 <h1>MLB Draft Big Board</h1>
+<div id="error-container"></div>
 
 <div class="board" id="board">
   <div class="header">
@@ -117,36 +126,54 @@
 </div>
 
 <script>
-  // REPLACE WITH YOUR GOOGLE SHEET ID
   const SHEET_ID = "1o581SSiEJJCtwXkeBF-UQxrBnUfUrQgAVOsdcInzx0E";
   const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=492241520&tqx=out:json`;
 
   fetch(SHEET_URL)
     .then(res => res.text())
     .then(text => {
-      const json = JSON.parse(text.substring(47).slice(0, -2));
-      const rows = json.table.rows;
+      try {
+        // Handle Google Sheets API response format
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table?.rows || [];
 
-      const players = rows.map(r => ({
-        rank: r.c[0]?.v,
-        name: r.c[1]?.v,
-        position: r.c[2]?.v,
-        school: r.c[3]?.v,
-        fv: r.c[4]?.v,
-        age: r.c[5]?.v,
-        height: r.c[6]?.v,
-        weight: r.c[7]?.v,
-        bat_hand: r.c[8]?.v,
-        throw_hand: r.c[9]?.v,
-        report: r.c[10]?.v,
-        report_link: r.c[11]?.v,
-        analytics_link: r.c[12]?.v,
-        video_link: r.c[13]?.v,
-        stats_link: r.c[14]?.v
-      }));
+        if (rows.length === 0) {
+          showError("No data found in spreadsheet. Check your Sheet ID and permissions.");
+          return;
+        }
 
-      renderBoard(players);
+        const players = rows.map(r => ({
+          rank: r.c[0]?.v,
+          name: r.c[1]?.v,
+          position: r.c[2]?.v,
+          school: r.c[3]?.v,
+          fv: r.c[4]?.v,
+          age: r.c[5]?.v,
+          height: r.c[6]?.v,
+          weight: r.c[7]?.v,
+          bat_hand: r.c[8]?.v,
+          throw_hand: r.c[9]?.v,
+          report: r.c[10]?.v,
+          report_link: r.c[11]?.v,
+          analytics_link: r.c[12]?.v,
+          video_link: r.c[13]?.v,
+          stats_link: r.c[14]?.v
+        }));
+
+        renderBoard(players);
+      } catch (err) {
+        showError("Error parsing data: " + err.message);
+      }
+    })
+    .catch(err => {
+      showError("Failed to fetch data. Check your internet connection and sheet permissions.");
+      console.error(err);
     });
+
+  function showError(message) {
+    const container = document.getElementById("error-container");
+    container.innerHTML = `<div class="error">${message}</div>`;
+  }
 
   function renderBoard(players) {
     const board = document.getElementById("board");
@@ -156,12 +183,12 @@
       row.className = "row";
 
       row.innerHTML = `
-        <div class="cell">${player.rank}</div>
-        <div class="cell name">${player.name}</div>
-        <div class="cell">${player.position}</div>
-        <div class="cell">${player.school}</div>
-        <div class="cell">${player.age}</div>
-        <div class="cell fv">${player.fv}</div>
+        <div class="cell">${player.rank || ""}</div>
+        <div class="cell name">${player.name || ""}</div>
+        <div class="cell">${player.position || ""}</div>
+        <div class="cell">${player.school || ""}</div>
+        <div class="cell">${player.age || ""}</div>
+        <div class="cell fv">${player.fv || ""}</div>
         <div class="cell">${player.throw_hand || ""}</div>
       `;
 
@@ -170,16 +197,16 @@
 
       details.innerHTML = `
         <h4>Scouting Report</h4>
-        <p>${player.report || ""}</p>
+        <p>${player.report || "No report available"}</p>
         <div class="bio">
           <strong>Bio:</strong>
-          ${player.height || ""} / ${player.weight || ""} lbs — Bats ${player.bat_hand || ""}, Throws ${player.throw_hand || ""}
+          ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
         </div>
         <div class="links">
-          ${player.report_link ? `<a href="${player.report_link}" target="_blank">Full Report</a>` : ""}
-          ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank">Analytics</a>` : ""}
-          ${player.video_link ? `<a href="${player.video_link}" target="_blank">Video</a>` : ""}
-          ${player.stats_link ? `<a href="${player.stats_link}" target="_blank">Stats</a>` : ""}
+          ${player.report_link ? `<a href="${player.report_link}" target="_blank" rel="noopener noreferrer">Full Report</a>` : ""}
+          ${player.analytics_link ? `<a href="${player.analytics_link}" target="_blank" rel="noopener noreferrer">Analytics</a>` : ""}
+          ${player.video_link ? `<a href="${player.video_link}" target="_blank" rel="noopener noreferrer">Video</a>` : ""}
+          ${player.stats_link ? `<a href="${player.stats_link}" target="_blank" rel="noopener noreferrer">Stats</a>` : ""}
         </div>
       `;
 
