@@ -352,25 +352,27 @@
       board.appendChild(row);
       board.appendChild(details);
 
-      // Add event listener to report button
-      const reportBtn = details.querySelector(`#fullreport-${player.rank}`);
-      if (reportBtn) {
-        reportBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openReportModal(player.name, player.full_report);
-        });
-      }
+      // Add event listener to report button AFTER it's in the DOM
+      setTimeout(() => {
+        const reportBtn = details.querySelector(`#fullreport-${player.rank}`);
+        if (reportBtn) {
+          reportBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openReportModal(player.name, player.full_report);
+          });
+        }
 
-      // Add event listener to analytics button
-      const analyticsBtn = details.querySelector(`#analytics-${player.rank}`);
-      if (analyticsBtn) {
-        analyticsBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("Analytics clicked, opening PDF:", player.analytics_link);
-          openPdfModal(player.analytics_link);
-        });
-      }
+        // Add event listener to analytics button AFTER it's in the DOM
+        const analyticsBtn = details.querySelector(`#analytics-${player.rank}`);
+        if (analyticsBtn) {
+          analyticsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Analytics clicked, opening PDF:", player.analytics_link);
+            openPdfModal(player.analytics_link);
+          });
+        }
+      }, 0);
     });
   }
 </script>
