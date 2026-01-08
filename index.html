@@ -126,11 +126,11 @@
 </div>
 
 <script>
-  const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBkt3LYeaR85hXDqOpd24cZvyESQOKtg3ahyhs0gC3V6VUWiOA9TiXuluPctZkNJ_tfZ2uatJckABA/pub?gid=492241520&single=true&output=csv";
-  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-  const URL_TO_FETCH = CORS_PROXY + SHEET_URL;
+  const SHEET_ID = "1o581SSiEJJCtwXkeBF-UQxrBnUfUrQgAVOsdcInzx0E";
+  const SHEET_GID = "492241520";
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${SHEET_GID}&tqx=out:json`;
 
-  fetch(URL_TO_FETCH)
+  fetch(SHEET_URL)
     .then(res => res.text())
     .then(text => {
       try {
