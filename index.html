@@ -832,6 +832,7 @@
           // Auto-open the full report modal if available
           const fullReportBtn = details.querySelector('[data-action="full-report"]');
           if (fullReportBtn) fullReportBtn.click();
+          history.replaceState(null, '', window.location.pathname);
         }, 300);
       }
     }
