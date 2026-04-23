@@ -634,9 +634,21 @@
         });
       });
       updateSortIndicators();
+
+      // Auto-open and scroll to player if hash in URL
+      if (window.location.hash) {
+        const targetId = window.location.hash.slice(1);
+        const targetRow = document.getElementById(targetId);
+        if (targetRow) {
+          const details = targetRow.nextElementSibling;
+          if (details) details.classList.add("open");
+          setTimeout(() => targetRow.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+        }
+      }
+
     }, 0);
   }
-
+  
   function clearBoard() {
     const board = document.getElementById("board");
     const rows = board.querySelectorAll('.row, .details, .no-results');
@@ -649,6 +661,7 @@
     players.forEach(player => {
         const row = document.createElement("div");
         row.className = "row";
+        row.id = player.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
         row.innerHTML = `
         <div class="cell">${player.rank || ""}</div>
