@@ -745,9 +745,12 @@
         }
 
         details.innerHTML = `
-        <h4>Scouting Summary</h4>
-        <p style="white-space: pre-wrap;">${player.report || "No report available"}</p>
-        
+        <h4>Strengths</h4>
+        <p style="white-space: pre-wrap;">${player.report || "No strengths available"}</p>
+
+        <h4>Weaknesses</h4>
+        <p style="white-space: pre-wrap;">${player.weaknesses || "No weaknesses available"}</p>
+
         <div class="bio">
           <strong>Bio:</strong>
           ${[player.height, player.weight ? `${player.weight} lbs` : ""].filter(Boolean).join(" / ") || "N/A"} — Bats ${player.bat_hand || "N/A"}, Throws ${player.throw_hand || "N/A"}
