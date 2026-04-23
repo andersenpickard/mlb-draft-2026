@@ -635,17 +635,6 @@
       });
       updateSortIndicators();
 
-      // Auto-open and scroll to player if hash in URL
-      if (window.location.hash) {
-        const targetId = window.location.hash.slice(1);
-        const targetRow = document.getElementById(targetId);
-        if (targetRow) {
-          const details = targetRow.nextElementSibling;
-          if (details) details.classList.add("open");
-          setTimeout(() => targetRow.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
-        }
-      }
-
     }, 0);
   }
   
@@ -830,6 +819,16 @@
             });
         }, 0);
     });
+    if (window.location.hash) {
+      const targetId = window.location.hash.slice(1);
+      const targetRow = document.getElementById(targetId);
+      if (targetRow) {
+        const details = targetRow.nextElementSibling;
+        if (details) details.classList.add("open");
+        setTimeout(() => targetRow.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+      }
+    }
+
 }
 </script>
 
