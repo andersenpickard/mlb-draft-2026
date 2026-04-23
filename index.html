@@ -825,10 +825,14 @@
       if (targetRow) {
         const details = targetRow.nextElementSibling;
         if (details) details.classList.add("open");
-        setTimeout(() => targetRow.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+        setTimeout(() => {
+          targetRow.scrollIntoView({ behavior: "smooth", block: "start" });
+          // Auto-open the full report modal if available
+          const fullReportBtn = details.querySelector('[data-action="full-report"]');
+          if (fullReportBtn) fullReportBtn.click();
+        }, 300);
       }
     }
-
 }
 </script>
 
